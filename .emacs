@@ -1,6 +1,28 @@
 (setq load-path (cons "~/emacs" load-path))
 
-; ln -s emacs/.emacs .emacs
+;; ln -s emacs/.emacs .emacs
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'package)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                    (not (gnutls-available-p))))
+       (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
+  (add-to-list 'package-archives (cons "melpa" url) t))
+(when (< emacs-major-version 24)
+  ;; For important compatibility libraries like cl-lib
+  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(when (>= emacs-major-version 24)
+  (package-initialize)
+  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
+
+(package-initialize)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(load "~/emacs/theme.el")
+(load "~/emacs/editing.el")
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -49,50 +71,8 @@
 
 ;; (show-paren-mode 1) 'package)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'package)
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-                    (not (gnutls-available-p))))
-       (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
-  (add-to-list 'package-archives (cons "melpa" url) t))
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(when (>= emacs-major-version 24)
-  (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
-
-(package-initialize)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;(load-theme 'atom-one-dark t)
-
-(require 'doom-themes)
-
-;; Global settings (defaults)
-(setq doom-themes-enable-bold t)   ; if nil, bold is universally disabled
-(setq doom-themes-enable-italic t) ; if nil, italics is universally disabled
-
-;; Load the theme (doom-one, doom-molokai, etc); keep in mind that each theme
-;; may have their own settings.
-(load-theme 'doom-one t)
-
-;; Enable flashing mode-line on errors
-;; (doom-themes-visual-bell-config)
-
-;; Enable custom neotree theme
-;;(doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
-;;(setq doom-neotree-enable-file-icons nil)
-;;(setq doom-neotree-enable-folder-icons nil)
-;;(setq doom-neotree-enable-chevron-icons nil)
-;;(setq doom-neotree-file-icons nil)
-
-;; Corrects (and improves) org-mode's native fontification.
-;; (doom-themes-org-config)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'desktop)
 (desktop-save-mode 1)
@@ -142,51 +122,6 @@
 ;; TODO: put mode line stuff in the echo area maybe, and hide mode line.
 ;; (make sure to still indicate active buffer somehow)
 ;; maybe scoll bars and just the line number would save space at the bottom mode line
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; TODO: comment and uncomment block/s-exp via control slash.
-;; dont have mode line print if im doing a search though text
-;; autosave before quit
-;; also, copy, paste, undo, redo, move line up/down one, select all
-;; equvalent of atom control shift, insert new line below current one and put cursor on it. dont break current line
-;; control-d (or such) to select current word/thing and
-;;     control-d while something is selected to also select next occcurence, w/ mutli cursor
-;; multiple cursors
-;; cider
-;; autocomplete/tab-complete in editor?
-;; better scrolling (smooth scrolling didnt work)
-;; repl/terminal/etc in emacs
-;; scroll up for history (in repl, in echo area maybe, etc)
-;; send to terminal?
-;; learn org mode
-;; better orginize .emacs
-;; emacs git integration (git porcelin?)
-;;   atom shows what lines are uncommited in git, which is maybe useful. maybe i could toggle to show dif or something
-;; better git repo support for emacs configs
-;;   (.emacs should just link to ~/emacs/ and ~/emacs/.emacs and ~/emacs/ should be git repo, im guessing)
-;; learn/get better find and find/replace (find in folder/repo/etc) (dired? helm?)
-;; learn/get better file/project navigation (neotree?) (control-k in atom?)
-;;    ?? https://github.com/bbatsov/projectile
-;; fuzzy find stuff (helm?)
-;; better toggle though buffers and frames. (but mostly frames)
-;; tweak timeouts on echo area messages and all that
-;; filter some messages (or tweak them) that go in echo area
-;;    (https://www.emacswiki.org/emacs/EchoArea)
-;; https://github.com/Fuco1/smartparens
-;; paredit
-;; https://github.com/Malabarba/aggressive-indent-mode
-;; https://github.com/ogdenwebb/emacs-kaolin-themes/wiki/Kaolin-dark-theme
-;; have paste try to indent corrently
-;; control-enter should make new line without breaking current line
-;; http://emacsredux.com/blog/2013/06/25/boost-performance-by-leveraging-byte-compilation/
-;; fuzzy finding for command tab completion (type eval-bufer and tab should make it eval-buffer, or something like that)
-;; if i start to type in an argument, up should take me though my history that matches that prefix, like i have in my terminal
-;; https://github.com/Malabarba/beacon
-;; https://github.com/wasamasa/eyebrowse
-;; https://www.emacswiki.org/emacs/Icicles
-;; https://github.com/syohex/emacs-git-gutter
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -255,148 +190,12 @@
 ;; (with-current-buffer " *Echo Area*" (face-remap-add-relative 'default :background "#222"))
 ;; (with-current-buffer " *Echo Area 1*" (face-remap-add-relative 'default :background "#222"))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(fringe-mode 0)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; TODO: look into window-divider-mode
 ;; https://emacs.stackexchange.com/questions/29873/whats-this-line-between-the-modeline-and-the-echo-area
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(cua-mode t)
-(setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
-(transient-mark-mode 1) ;; No region when it is not highlighted
-(setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(delete-selection-mode 1)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'multiple-cursors)
-(require 'mouse)
-
-(xterm-mouse-mode t)
-
-(defun cancel-cursor-click (event)
-  (interactive "e")
-  (mouse-drag-region event)
-  (mc/remove-fake-cursors))
-
-(defun mark-whole-word (&optional arg allow-extend)
-  "Like `mark-word', but selects whole words and skips over whitespace.
-If you use a negative prefix arg then select words backward.
-Otherwise select them forward.
-If there is whitespace between the initial cursor position and the
-first word (in the selection direction), it is skipped (not selected).
-If the command is repeated or the mark is active, select the next NUM
-words, where NUM is the numeric prefix argument.  (Negative NUM
-selects backward.)"
-  (interactive "P\np")
-  (let ((num (prefix-numeric-value arg)))
-    (unless (eq last-command this-command)
-      (if (natnump num)
-          (skip-syntax-forward "\\s-")
-        (skip-syntax-backward "\\s-")))
-    (unless (or (eq last-command this-command)
-                (if (natnump num)
-                    (looking-at "\\b")
-                  (looking-back "\\b")))
-      (if (natnump num)
-          (left-word)
-        (right-word)))
-    (mark-word arg allow-extend)))
-
-(defun atom-C-d ()
-  (interactive)
-  (message (number-to-string
-            (cl-count-if 'mc/fake-cursor-p
-	                   (overlays-in (point-min) (point-max)))))
-  (if (= 1 (mc/num-cursors))
-      (mark-whole-word)
-    (mc/mark-next-like-this-word)))
-
-(global-unset-key (kbd "C-<down-mouse-1>"))
-(global-set-key (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
-
-(global-unset-key (kbd "<down-mouse-1>"))
-(global-set-key (kbd "<down-mouse-1>") 'cancel-cursor-click)
-
-(global-unset-key (kbd "C-d"))
-(global-set-key (kbd "C-d") 'atom-C-d)
-(global-set-key (kbd "C-S-d") 'mc/mark-all-like-this)
-
-(define-key mc/keymap (kbd "<return>") nil)
-
-;; press C-' to hide all lines without a cursor, press C-' again to unhide
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun toggle-comment ()
-    "Comments or uncomments the region or the current line if there's no active region."
-    (interactive)
-    (let (beg end)
-        (if (region-active-p)
-            (setq beg (region-beginning) end (region-end))
-            (setq beg (line-beginning-position) end (line-end-position)))
-        (comment-or-uncomment-region beg end)))
-
-(global-unset-key (kbd "C-;"))
-(global-set-key (kbd "C-;") 'toggle-comment)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun duplicate-line-or-region (&optional n)
-  "Duplicate current line, or region if active.
-    With argument N, make N copies.
-    With negative N, comment out original line and use the absolute value."
-  (interactive "*p")
-  (let ((use-region (use-region-p)))
-    (save-excursion
-      (let ((text (if use-region        ;Get region if active, otherwise line
-                      (buffer-substring (region-beginning) (region-end))
-                    (prog1 (thing-at-point 'line)
-                      (end-of-line)
-                      (if (< 0 (forward-line 1)) ;Go to beginning of next line, or make a new one
-                          (newline))))))
-        (dotimes (i (abs (or n 1)))     ;Insert N times, or once if not specified
-          (insert text))))
-    (if use-region nil                  ;Only if we're working with a line (not a region)
-      (let ((pos (- (point) (line-beginning-position)))) ;Save column
-        (if (> 0 n)                             ;Comment out original with negative arg
-            (comment-region (line-beginning-position) (line-end-position)))
-        (forward-line 1)
-        (forward-char pos)))))
-
-(global-unset-key (kbd "C-S-d"))
-(global-set-key (kbd "C-S-d") 'duplicate-line-or-region)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun quick-cut-line ()
-  "Cut the whole line that point is on.  Consecutive calls to this command append each line to the kill-ring."
-  (interactive)
-  (let ((beg (line-beginning-position 1))
-	(end (line-beginning-position 2)))
-    (if (eq last-command 'quick-cut-line)
-	(kill-append (buffer-substring beg end) (< end beg))
-      (kill-new (buffer-substring beg end)))
-    (delete-region beg end))
-  (beginning-of-line 1)
-  (setq this-command 'quick-cut-line))
-
-(global-unset-key (kbd "C-S-k"))
-(global-set-key (kbd "C-S-k") 'quick-cut-line)
-
-; make this line or region
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 (custom-set-variables
@@ -431,44 +230,6 @@ selects backward.)"
 ;; this is ugly/lots of visual noise, but ok.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun move-text-internal (arg)
-   (cond
-    ((and mark-active transient-mark-mode)
-     (if (> (point) (mark))
-            (exchange-point-and-mark))
-     (let ((column (current-column))
-              (text (delete-and-extract-region (point) (mark))))
-       (forward-line arg)
-       (move-to-column column t)
-       (set-mark (point))
-       (insert text)
-       (exchange-point-and-mark)
-       (setq deactivate-mark nil)))
-    (t
-     (beginning-of-line)
-     (when (or (> arg 0) (not (bobp)))
-       (forward-line)
-       (when (or (< arg 0) (not (eobp)))
-            (transpose-lines arg))
-       (forward-line -1)))))
-
-(defun move-text-down (arg)
-   "Move region (transient-mark-mode active) or current line
-  arg lines down."
-   (interactive "*p")
-   (move-text-internal arg))
-
-(defun move-text-up (arg)
-   "Move region (transient-mark-mode active) or current line
-  arg lines up."
-   (interactive "*p")
-   (move-text-internal (- arg)))
-
-(global-set-key (kbd "C-S-<up>") 'move-text-up)
-(global-set-key (kbd "C-S-<down>") 'move-text-down)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; https://www.masteringemacs.org/article/improving-performance-emacs-display-engine
 (setq redisplay-dont-pause t)
@@ -567,7 +328,7 @@ That is, a string used to represent it on the tab bar."
   :defer t
   :config (progn
             (setq treemacs-follow-after-init          t
-                  treemacs-width                      26
+                  treemacs-width                      30
                   treemacs-indentation                1
                   treemacs-git-integration            t
                   treemacs-collapse-dirs              0
@@ -589,20 +350,19 @@ That is, a string used to represent it on the tab bar."
 (use-package treemacs-projectile
   :defer t
   :ensure t
-  :config (setq treemacs-header-function #'treemacs-projectile-create-header)
-  :bind (:map global-map
-              ("C-c 3" . treemacs-projectile)
-              ("C-c 4" . treemacs-projectile-toggle)))
+  :config (setq treemacs-header-function #'treemacs-projectile-create-header))
 
-(with-eval-after-load "treemacs"
-  (defvar treemacs-custom-html-icon nil)
-  (treemacs-define-custom-icon treemacs-custom-html-icon "clj"))
+;; (with-eval-after-load "treemacs"
+;;   (defvar treemacs-custom-html-icon nil)
+;;   (treemacs-define-custom-icon treemacs-custom-html-icon "clj"))
 
 (defun treemacs-header-with-brackets (current-root)
-  (format "<%s>" (file-name-nondirectory current-root)))
+  (format "%s" (file-name-nondirectory current-root)))
+
 (setq treemacs-header-function #'treemacs-header-with-brackets)
 
 ;; TODO: have it follow version control of a buffer
 ;; TODO: no icons
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
