@@ -1,3 +1,5 @@
+;; NOTE: scroll to cycle though tab groups
+
 (require 'tabbar)
 
 (tabbar-mode 1)
@@ -6,43 +8,35 @@
 (setq *tabbar-ignore-buffers* '("tab-ignore-example" ".bbdb" "diary"))
 
 ;; Tabbar settings
-(set-face-attribute
- 'tabbar-default nil
- :background "gray20"
- :foreground "gray20"
- :box '(:line-width 1 :color "gray20" :style nil)
- :height 1.1)
-(set-face-attribute
- 'tabbar-unselected nil
- :background "gray30"
- :foreground "white"
- :box '(:line-width 5 :color "gray30" :style nil))
-(set-face-attribute
- 'tabbar-selected nil
- :background "gray75"
- :foreground "black"
- :box '(:line-width 5 :color "gray75" :style nil))
-(set-face-attribute
- 'tabbar-highlight nil
- :background "white"
- :foreground "black"
- :underline nil
- :box '(:line-width 5 :color "white" :style nil))
-(set-face-attribute
- 'tabbar-button nil
- :box '(:line-width 1 :color "gray20" :style nil))
-(set-face-attribute
- 'tabbar-separator nil
- :background "gray20"
- :height 0.6)
-(set-face-attribute
- 'tabbar-default nil
- :background "gray20"
- :foreground "gray20"
- :box '(:line-width 1 :color "gray20" :style nil))
-
-;; Change padding of the tabs
-;; we also need to set separator to avoid overlapping tabs by highlighted tabs
+(set-face-attribute 'tabbar-default nil
+                    :background "gray20"
+                    :foreground "gray20"
+                    :box '(:line-width 1 :color "gray20" :style nil)
+                    :height 1.1)
+(set-face-attribute 'tabbar-unselected nil
+                    :background "gray30"
+                    :foreground "white"
+                    :box '(:line-width 5 :color "gray30" :style nil))
+(set-face-attribute 'tabbar-selected nil
+                    :background "gray75"
+                    :foreground "black"
+                    :box '(:line-width 5 :color "gray75" :style nil))
+(set-face-attribute 'tabbar-highlight nil
+                    :background "white"
+                    :foreground "black"
+                    :underline nil
+                    :box '(:line-width 5 :color "white" :style nil))
+(set-face-attribute 'tabbar-button nil
+                    :foreground "white"
+                    :background "gray20"
+                    :box '(:line-width 1 :color "gray20" :style nil))
+(set-face-attribute 'tabbar-separator nil
+                    :background "gray20"
+                    :height 0.6)
+(set-face-attribute 'tabbar-default nil
+                    :background "gray20"
+                    :foreground "gray20"
+                    :box '(:line-width 1 :color "gray20" :style nil))
 
 ;; adding spaces
 (defun tabbar-buffer-tab-label (tab)
@@ -60,8 +54,6 @@ That is, a string used to represent it on the tab bar."
        label (max 1 (/ (window-width)
                        (length (tabbar-view
                                 (tabbar-current-tabset)))))))))
-
-
 
  (defun my-tabbar-buffer-groups () ;; customize to show all normal files in one group
    "Returns the name of the tab group names the current buffer belongs to.
@@ -85,3 +77,11 @@ That is, a string used to represent it on the tab bar."
 ;; thus it would be more like atom/chrome tabs
 
 ;; TODO: size of each tab should not move when i cycle though them and jiggle whole bar
+
+;; TODO: if only one tab, should hide bar maybe.
+
+
+(defsubst tabbar-line-buttons (tabset)
+  "Return a list of propertized strings for tab bar buttons.
+TABSET is the tab set used to choose the appropriate buttons."
+  (list tabbar-separator-value))
