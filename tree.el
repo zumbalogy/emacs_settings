@@ -1,10 +1,12 @@
+(defun my-visit-node (&args)
+  (message args))
 
 (use-package treemacs
   :ensure t
   :defer t
   :config (progn
             (setq treemacs-follow-after-init          t
-                  treemacs-width                      30
+                  treemacs-width                      28
                   treemacs-indentation                1
                   treemacs-git-integration            t
                   treemacs-collapse-dirs              0
@@ -12,9 +14,11 @@
                   treemacs-change-root-without-asking nil
                   treemacs-sorting                    'alphabetic-desc
                   treemacs-show-hidden-files          t
+                  treemacs-no-images                  t
                   treemacs-never-persist              nil
-                  treemacs-is-never-other-window      nil
-                  treemacs-goto-tag-strategy          'refetch-index)
+                  treemacs-is-never-other-window      t
+                  treemacs-goto-tag-strategy          'refetch-index
+                  )
             (treemacs-follow-mode t)
             (treemacs-filewatch-mode t))
   :bind (:map global-map
@@ -23,19 +27,25 @@
               ("C-c 1"      . treemacs-delete-other-windows)
               ("C-c 2"      . treemacs-find-file)))
 
-(use-package treemacs-projectile
-  :defer t
-  :ensure t
-  :config (setq treemacs-header-function #'treemacs-projectile-create-header))
-
-;; (with-eval-after-load "treemacs"
-;;   (defvar treemacs-custom-html-icon nil)
-;;   (treemacs-define-custom-icon treemacs-custom-html-icon "clj"))
 
 (defun treemacs-header-with-brackets (current-root)
   (format "%s" (file-name-nondirectory current-root)))
 
 (setq treemacs-header-function #'treemacs-header-with-brackets)
 
+(use-package treemacs-projectile
+  :defer t
+  :ensure t)
+  ;; :config (setq treemacs-header-function #'treemacs-projectile-create-header))
+
+(setq treemacs-icon-fallback (propertize "  " 'face 'treemacs-term-node-face))
+(setq treemacs-icon-closed (propertize "+ " 'face 'treemacs-term-node-face))
+(setq treemacs-icon-open (propertize "- " 'face 'treemacs-term-node-face))
+
+(with-eval-after-load "treemacs"
+  (maphash (lambda (key value)
+             (puthash key treemacs-icon-fallback treemacs-icons-hash))
+           treemacs-icons-hash))
+
+
 ;; TODO: have it follow version control of a buffer
-;; TODO: no icons
