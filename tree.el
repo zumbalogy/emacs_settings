@@ -47,5 +47,12 @@
              (puthash key treemacs-icon-fallback treemacs-icons-hash))
            treemacs-icons-hash))
 
-
 ;; TODO: have it follow version control of a buffer
+
+;; (remove-hook 'emacs-lisp-mode-hook
+;;           (lambda ()
+;;             (set-background-color "red")))
+
+;; (require 'color-theme-buffer-local)
+;;    (add-hook 'emacs-lisp-mode-hook
+;;      (lambda nil (color-theme-buffer-local 'doom-nova (current-buffer))))

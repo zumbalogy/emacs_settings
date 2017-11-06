@@ -21,7 +21,7 @@
 ;; (doom-themes-visual-bell-config)
 
 ;; Enable custom neotree theme
-;;(doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
+;;( doom-themes-neotree-config)  ; all-the-icons fonts must be installed!
 ;;(setq doom-neotree-enable-file-icons nil)
 ;;(setq doom-neotree-enable-folder-icons nil)
 ;;(setq doom-neotree-enable-chevron-icons nil)

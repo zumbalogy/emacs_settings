@@ -5,8 +5,6 @@
 (setq tbbr-md "all")
 (setq *tabbar-ignore-buffers* '("tab-ignore-example" ".bbdb" "diary"))
 
-
-
 ;; Tabbar settings
 (set-face-attribute
  'tabbar-default nil
@@ -85,3 +83,5 @@ That is, a string used to represent it on the tab bar."
 
 ;; TODO: maybe group tabs by what buffer they were opened in
 ;; thus it would be more like atom/chrome tabs
+
+;; TODO: size of each tab should not move when i cycle though them and jiggle whole bar

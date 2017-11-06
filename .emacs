@@ -47,7 +47,44 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(global-set-key [(control w)] 'kill-this-buffer)
+(defun save-and-kill-this-buffer ()
+  (interactive)
+  (save-buffer)
+  (kill-this-buffer))
+
+;; https://emacs.stackexchange.com/questions/3330/how-to-reopen-just-killed-buffer-like-c-s-t-in-firefox-browser
+(defvar killed-file-list nil
+  "List of recently killed files.")
+
+(defun add-file-to-killed-file-list ()
+  "If buffer is associated with a file name, add that file to the
+`killed-file-list' when killing the buffer."
+  (when buffer-file-name
+    (push buffer-file-name killed-file-list)))
+
+(add-hook 'kill-buffer-hook #'add-file-to-killed-file-list)
+
+(defun reopen-killed-file ()
+  "Reopen the most recently killed file, if one exists."
+  (interactive)
+  (when killed-file-list
+    (find-file (pop killed-file-list))))
+
+
+(global-set-key [(control w)] 'save-and-kill-this-buffer)
+(global-set-key [(control shift t)] 'reopen-killed-file)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun my-quit ()
+  (interactive)
+  (save-buffers-kill-terminal))
+
+(global-unset-key [(control q)])
+(global-set-key [(control q)] 'my-quit)
+
+
+;; foo
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -76,7 +113,6 @@
 
 ;; (show-paren-mode 1) 'package)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'desktop)
@@ -103,25 +139,6 @@
 
 ;; TODO: look into window-divider-mode
 ;; https://emacs.stackexchange.com/questions/29873/whats-this-line-between-the-modeline-and-the-echo-area
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (treemacs beacon tabbar smex symon smooth-scrolling smooth-scroll rainbow-delimiters neotree multiple-cursors minibuffer-line el-get doom-themes clojure-mode-extra-font-locking cider atom-one-dark-theme)))
- '(tabbar-separator (quote (0.5))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
