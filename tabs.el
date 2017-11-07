@@ -9,30 +9,31 @@
 
 ;; Tabbar settings
 (set-face-attribute 'tabbar-default nil
-                    :background "gray20"
-                    :foreground "gray20"
-                    :box '(:line-width 5 :color "gray20" :style nil)
-                    :height 1.1)
-(set-face-attribute 'tabbar-unselected nil
-                    :background "gray30"
+                    :background "gray40"
                     :foreground "white"
-                    :box '(:line-width 5 :color "gray30" :style nil))
+                    :height 1.2
+                    :box '(:line-width 5 :color "gray40" :style nil))
 (set-face-attribute 'tabbar-selected nil
-                    :background "gray75"
+                    :background "gray80"
                     :foreground "black"
-                    :box '(:line-width 5 :color "gray75" :style nil))
+                    :bold nil
+                    :box '(:line-width 5 :color "gray80" :style nil))
+(set-face-attribute 'tabbar-unselected nil
+                    :background "gray40"
+                    :foreground "black")
 (set-face-attribute 'tabbar-highlight nil
-                    :background "white"
+                    :background "gray80"
                     :foreground "black"
                     :underline nil
-                    :box '(:line-width 5 :color "white" :style nil))
-(set-face-attribute 'tabbar-button nil
-                    :foreground "white"
-                    :background "gray20"
-                    :box '(:line-width 5 :color "gray20" :style nil))
+                    :box '(:line-width 5 :color "gray80" :style nil))
+(set-face-attribute 'tabbar-modified nil
+                    :bold nil
+                    :foreground "black")
+(set-face-attribute 'tabbar-selected-modified nil
+                    :bold nil
+                    :foreground "black")
 (set-face-attribute 'tabbar-separator nil
-                    :background "gray30"
-                    :height 0.6)
+                    :box '(:line-width 5 :color "#1c1e24" :style nil))
 
 ;; adding spaces
 (defun tabbar-buffer-tab-label (tab)
@@ -40,7 +41,7 @@
 That is, a string used to represent it on the tab bar."
   (let ((label  (if tabbar--buffer-show-groups
                     (format "[%s]  " (tabbar-tab-tabset tab))
-                  (format "%s  " (tabbar-tab-value tab)))))
+                  (format "%s " (tabbar-tab-value tab)))))
     ;; Unless the tab bar auto scrolls to keep the selected tab
     ;; visible, shorten the tab label to keep as many tabs as possible
     ;; in the visible area of the tab bar.
@@ -66,7 +67,6 @@ That is, a string used to represent it on the tab bar."
 (global-set-key [(control tab)] 'tabbar-forward-tab)
 
 ;; TODO: tabbar would maybe be better as a modeline (or message to echo area)
-;; and could just have control-tab rotate though a group of tabs
 ;; or at least dont need file name in mode line
 
 ;; TODO: maybe group tabs by what buffer they were opened in
@@ -79,4 +79,67 @@ That is, a string used to represent it on the tab bar."
 (defsubst tabbar-line-buttons (tabset)
   "Return a list of propertized strings for tab bar buttons.
 TABSET is the tab set used to choose the appropriate buttons."
-  (list tabbar-separator-value))
+  (list (propertize "")))
+
+(defun tabbar-line-format (tabset)
+  "Return the `header-line-format' value to display TABSET."
+  (let* ((sel (tabbar-selected-tab tabset))
+         (tabs (tabbar-view tabset))
+         (padcolor (tabbar-background-color))
+         atsel elts)
+    ;; Initialize buttons and separator values.
+    (or tabbar-separator-value
+        (tabbar-line-separator))
+    (or tabbar-home-button-value
+        (tabbar-line-button 'home))
+    (or tabbar-scroll-left-button-value
+        (tabbar-line-button 'scroll-left))
+    (or tabbar-scroll-right-button-value
+        (tabbar-line-button 'scroll-right))
+    ;; Track the selected tab to ensure it is always visible.
+    (when tabbar--track-selected
+      (while (not (memq sel tabs))
+        (tabbar-scroll tabset -1)
+        (setq tabs (tabbar-view tabset)))
+      (while (and tabs (not atsel))
+        (setq elts  (cons (tabbar-line-tab (car tabs)) elts)
+              atsel (eq (car tabs) sel)
+              tabs  (cdr tabs)))
+      (setq elts (nreverse elts))
+      ;; At this point the selected tab is the last elt in ELTS.
+      ;; Scroll TABSET and ELTS until the selected tab becomes
+      ;; visible.
+      (with-temp-buffer
+        (let ((truncate-partial-width-windows nil)
+              (inhibit-modification-hooks t)
+              deactivate-mark ;; Prevent deactivation of the mark!
+              start)
+          (setq truncate-lines nil
+                buffer-undo-list t)
+          (apply 'insert (tabbar-line-buttons tabset))
+          (setq start (point))
+          (while (and (cdr elts) ;; Always show the selected tab!
+                      (progn
+                        (delete-region start (point-max))
+                        (goto-char (point-max))
+                        (apply 'insert elts)
+                        (goto-char (point-min))
+                        (> (vertical-motion 1) 0)))
+            (tabbar-scroll tabset 1)
+            (setq elts (cdr elts)))))
+      (setq elts (nreverse elts))
+      (setq tabbar--track-selected nil))
+    ;; Format remaining tabs.
+    (while tabs
+      (setq elts (cons (tabbar-line-tab (car tabs)) elts)
+            tabs (cdr tabs)))
+    ;; Cache and return the new tab bar.
+    (tabbar-set-template
+     tabset
+     (list (tabbar-line-buttons tabset)
+           (nreverse elts)
+           (propertize "%"
+                       'face (list :background padcolor
+                                   :foreground padcolor)
+                       'pointer 'arrow)))
+    ))

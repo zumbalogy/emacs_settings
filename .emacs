@@ -76,12 +76,11 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun my-quit ()
-  (interactive)
-  (save-buffers-kill-terminal))
+;; (defun my-quit ()
+;;   (save-buffers-kill-terminal))
 
-(global-unset-key [(control q)])
-(global-set-key [(control q)] 'my-quit)
+;; (global-unset-key [(control q)])
+;; (global-set-key [(control q)] 'my-quit)
 
 
 ;; foo

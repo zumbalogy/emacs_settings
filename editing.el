@@ -12,62 +12,62 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-(require 'multiple-cursors)
-(require 'mouse)
+;; (require 'multiple-cursors)
+;; (require 'mouse)
 
-(xterm-mouse-mode t)
+;; (xterm-mouse-mode t)
 
-(defun cancel-cursor-click (event)
-  (interactive "e")
-  (mouse-drag-region event)
-  (mc/remove-fake-cursors))
+;; (defun cancel-cursor-click (event)
+;;   (interactive "e")
+;;   (mouse-drag-region event)
+;;   (mc/remove-fake-cursors))
 
-(defun mark-whole-word (&optional arg allow-extend)
-  "Like `mark-word', but selects whole words and skips over whitespace.
-If you use a negative prefix arg then select words backward.
-Otherwise select them forward.
-If there is whitespace between the initial cursor position and the
-first word (in the selection direction), it is skipped (not selected).
-If the command is repeated or the mark is active, select the next NUM
-words, where NUM is the numeric prefix argument.  (Negative NUM
-selects backward.)"
-  (interactive "P\np")
-  (let ((num (prefix-numeric-value arg)))
-    (unless (eq last-command this-command)
-      (if (natnump num)
-          (skip-syntax-forward "\\s-")
-        (skip-syntax-backward "\\s-")))
-    (unless (or (eq last-command this-command)
-                (if (natnump num)
-                    (looking-at "\\b")
-                  (looking-back "\\b")))
-      (if (natnump num)
-          (left-word)
-        (right-word)))
-    (mark-word arg allow-extend)))
+;; (defun mark-whole-word (&optional arg allow-extend)
+;;   "Like `mark-word', but selects whole words and skips over whitespace.
+;; If you use a negative prefix arg then select words backward.
+;; Otherwise select them forward.
+;; If there is whitespace between the initial cursor position and the
+;; first word (in the selection direction), it is skipped (not selected).
+;; If the command is repeated or the mark is active, select the next NUM
+;; words, where NUM is the numeric prefix argument.  (Negative NUM
+;; selects backward.)"
+;;   (interactive "P\np")
+;;   (let ((num (prefix-numeric-value arg)))
+;;     (unless (eq last-command this-command)
+;;       (if (natnump num)
+;;           (skip-syntax-forward "\\s-")
+;;         (skip-syntax-backward "\\s-")))
+;;     (unless (or (eq last-command this-command)
+;;                 (if (natnump num)
+;;                     (looking-at "\\b")
+;;                   (looking-back "\\b")))
+;;       (if (natnump num)
+;;           (left-word)
+;;         (right-word)))
+;;     (mark-word arg allow-extend)))
 
-(defun atom-C-d ()
-  (interactive)
-  (message (number-to-string
-            (cl-count-if 'mc/fake-cursor-p
-	                   (overlays-in (point-min) (point-max)))))
-  (if (= 1 (mc/num-cursors))
-      (mark-whole-word)
-    (mc/mark-next-like-this-word)))
+;; (defun atom-C-d ()
+;;   (interactive)
+;;   (message (number-to-string
+;;             (cl-count-if 'mc/fake-cursor-p
+;; 	                   (overlays-in (point-min) (point-max)))))
+;;   (if (= 1 (mc/num-cursors))
+;;       (mark-whole-word)
+;;     (mc/mark-next-like-this-word)))
 
-(global-unset-key (kbd "C-<down-mouse-1>"))
-(global-set-key (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
+;; (global-unset-key (kbd "C-<down-mouse-1>"))
+;; (global-set-key (kbd "C-<mouse-1>") 'mc/add-cursor-on-click)
 
-(global-unset-key (kbd "<down-mouse-1>"))
-(global-set-key (kbd "<down-mouse-1>") 'cancel-cursor-click)
+;; (global-unset-key (kbd "<down-mouse-1>"))
+;; (global-set-key (kbd "<down-mouse-1>") 'cancel-cursor-click)
 
-(global-unset-key (kbd "C-d"))
-(global-set-key (kbd "C-d") 'atom-C-d)
-(global-set-key (kbd "C-S-d") 'mc/mark-all-like-this)
+;; (global-unset-key (kbd "C-d"))
+;; (global-set-key (kbd "C-d") 'atom-C-d)
+;; (global-set-key (kbd "C-S-d") 'mc/mark-all-like-this)
 
-(define-key mc/keymap (kbd "<return>") nil)
+;; (define-key mc/keymap (kbd "<return>") nil)
 
-;; press C-' to hide all lines without a cursor, press C-' again to unhide
+;; ;; press C-' to hide all lines without a cursor, press C-' again to unhide
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

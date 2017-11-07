@@ -45,14 +45,10 @@
 (with-eval-after-load "treemacs"
   (maphash (lambda (key value)
              (puthash key treemacs-icon-fallback treemacs-icons-hash))
-           treemacs-icons-hash))
+           treemacs-icons-hash)
+  ;(define-key treemacs-mode-map [mouse-1] 'treemacs-visit-node-default-action)
+  )
 
 ;; TODO: have it follow version control of a buffer
-
-;; (remove-hook 'emacs-lisp-mode-hook
-;;           (lambda ()
-;;             (set-background-color "red")))
-
-;; (require 'color-theme-buffer-local)
-;;    (add-hook 'emacs-lisp-mode-hook
-;;      (lambda nil (color-theme-buffer-local 'doom-nova (current-buffer))))
+;; TODO: hide "Treemacs" text from the modeline
+;; TODO: would be nice to color the tree background
