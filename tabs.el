@@ -5,13 +5,13 @@
 (tabbar-mode 1)
 
 (setq tbbr-md "all")
-(setq *tabbar-ignore-buffers* '("tab-ignore-example" ".bbdb" "diary"))
+;; (setq *tabbar-ignore-buffers* '("tab-ignore-example" ".bbdb" "diary"))
 
 ;; Tabbar settings
 (set-face-attribute 'tabbar-default nil
                     :background "gray20"
                     :foreground "gray20"
-                    :box '(:line-width 1 :color "gray20" :style nil)
+                    :box '(:line-width 5 :color "gray20" :style nil)
                     :height 1.1)
 (set-face-attribute 'tabbar-unselected nil
                     :background "gray30"
@@ -29,14 +29,10 @@
 (set-face-attribute 'tabbar-button nil
                     :foreground "white"
                     :background "gray20"
-                    :box '(:line-width 1 :color "gray20" :style nil))
+                    :box '(:line-width 5 :color "gray20" :style nil))
 (set-face-attribute 'tabbar-separator nil
-                    :background "gray20"
+                    :background "gray30"
                     :height 0.6)
-(set-face-attribute 'tabbar-default nil
-                    :background "gray20"
-                    :foreground "gray20"
-                    :box '(:line-width 1 :color "gray20" :style nil))
 
 ;; adding spaces
 (defun tabbar-buffer-tab-label (tab)
@@ -76,11 +72,10 @@ That is, a string used to represent it on the tab bar."
 ;; TODO: maybe group tabs by what buffer they were opened in
 ;; thus it would be more like atom/chrome tabs
 
-;; TODO: size of each tab should not move when i cycle though them and jiggle whole bar
-
 ;; TODO: if only one tab, should hide bar maybe.
 
-
+;; This gets rid of tabbar buttons. maybe scroll should scroll if there are more
+;; buttons than fit on the line, and control+scroll or something could cycle groups
 (defsubst tabbar-line-buttons (tabset)
   "Return a list of propertized strings for tab bar buttons.
 TABSET is the tab set used to choose the appropriate buttons."

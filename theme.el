@@ -31,3 +31,6 @@
 ;; (doom-themes-org-config)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (set-face-background 'vertical-border "red")
+(set-face-foreground 'vertical-border "gray")
