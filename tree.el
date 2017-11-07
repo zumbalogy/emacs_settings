@@ -46,7 +46,7 @@
   (maphash (lambda (key value)
              (puthash key treemacs-icon-fallback treemacs-icons-hash))
            treemacs-icons-hash)
-  ;(define-key treemacs-mode-map [mouse-1] 'treemacs-visit-node-default-action)
+  (define-key treemacs-mode-map [mouse-1] 'treemacs-visit-node-default-action)
   )
 
 ;; TODO: have it follow version control of a buffer
