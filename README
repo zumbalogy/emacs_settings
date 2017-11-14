@@ -10,6 +10,7 @@ TODO
 ;; control-d (or such) to select current word/thing and
 ;;     control-d while something is selected to also select next occcurence, w/ mutli cursor
 ;; multiple cursors
+;; https://www.emacswiki.org/emacs/multiple-line-edit.el
 ;; cider
 ;; autocomplete/tab-complete in editor?
 ;; better scrolling (smooth scrolling didnt work)
@@ -32,6 +33,7 @@ TODO
 ;;    (https://www.emacswiki.org/emacs/EchoArea)
 ;; https://github.com/Fuco1/smartparens
 ;; paredit
+;; line numbers
 ;; git gutter working
 ;; https://github.com/Malabarba/aggressive-indent-mode
 ;; https://github.com/ogdenwebb/emacs-kaolin-themes/wiki/Kaolin-dark-theme
@@ -44,4 +46,10 @@ TODO
 ;; https://github.com/wasamasa/eyebrowse
 ;; https://www.emacswiki.org/emacs/Icicles
 ;; https://github.com/syohex/emacs-git-gutter
-;; persistent undo
+;; https://www.emacswiki.org/emacs/SpeedBar
+
+
+these are the current packages i have downloaded:
+
+
+(icicles atom-one-dark-theme cider clojure-mode-extra-font-locking clojure-mode color-theme-buffer-local color-theme doom-themes all-the-icons el-get font-lock+ memoize minibuffer-line multiple-cursors neotree queue rainbow-delimiters seq smex smooth-scroll smooth-scrolling spinner symon tabbar treemacs-projectile treemacs hydra pfuture ace-window avy f s dash projectile pkg-info epl undo-tree use-package diminish bind-key)
