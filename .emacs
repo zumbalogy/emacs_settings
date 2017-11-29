@@ -2,31 +2,49 @@
 
 ;; ln -s emacs/.emacs .emacs
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; TODO: have a file that i run only the first time i run emacs
+;; (or have touched config files)
+
+;; (require 'package)
+;; (require 'desktop)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'package)
+(let ((gc-cons-threshold 10000000))
+  (package-initialize)
+  (byte-recompile-directory (expand-file-name "~/emacs") 0)
+  (load "~/emacs/theme.el")
+  (load "~/emacs/editing.el")
+  (load "~/emacs/tabs.el")
+  (load "~/emacs/tree.el")
+  ;; (load "~/emacs/mode_line.el")
+  )
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
                     (not (gnutls-available-p))))
        (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
   (add-to-list 'package-archives (cons "melpa" url) t))
-(when (< emacs-major-version 24)
-  ;; For important compatibility libraries like cl-lib
-  (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(when (>= emacs-major-version 24)
-  (package-initialize)
-  (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t))
 
-(package-initialize)
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load "~/emacs/theme.el")
-(load "~/emacs/editing.el")
-;; (load "~/emacs/mode_line.el")
-(load "~/emacs/tabs.el")
-(load "~/emacs/tree.el")
+(defun my-desktop-save ()
+   (interactive)
+   ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
+  (if (eq (desktop-owner) (emacs-pid))
+      (desktop-save desktop-dirname)))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(desktop-save-mode 1)
+(setq desktop-restore-eager 7)
+(add-hook 'auto-save-hook 'my-desktop-save)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun save-all ()
   (interactive)
@@ -45,7 +63,7 @@
 
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun save-and-kill-this-buffer ()
   (interactive)
@@ -93,7 +111,7 @@
 ;; TODO: maybe make it so it ignores git ignored things by default
 
 (setq fiplr-ignored-globs '((directories (".git" ".svn" ".hg" ".bzr" "target"))
-                            (files (".#*" "*~" "*.so" "*.jpg" "*.png" "*.gif" "*.pdf" "*.gz" "*.zip"))))
+                            (files (".#*" "*~" "*.so" "*.o" "*.jpg" "*.png" "*.gif" "*.pdf" "*.gz" "*.zip"))))
 
 
 (global-unset-key [(control t)])
@@ -111,32 +129,20 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(toggle-scroll-bar -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
+(with-eval-after-load "foo"
+  (toggle-scroll-bar -1)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (set-face-attribute 'default nil :height 130))
 
 (setq column-number-mode t)
 
 (setq-default cursor-type 'bar)
 
-(set-face-attribute 'default nil :height 130)
-
 (setq-default indent-tabs-mode nil)
 (setq tab-width 2)
 
 ;; (show-paren-mode 1) 'package)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(require 'desktop)
-(desktop-save-mode 1)
-(defun my-desktop-save ()
-   (interactive)
-   ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
-  (if (eq (desktop-owner) (emacs-pid))
-      (desktop-save desktop-dirname)))
-
-(add-hook 'auto-save-hook 'my-desktop-save)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -155,14 +161,24 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(require 'smex) ; Not needed if you use package.el
-(smex-initialize) ; Can be omitted. This might cause a (minimal) delay
+;; (require 'smex) ; Not needed if you use package.el
+;; (smex-initialize) ; Can be omitted. This might cause a (minimal) delay
                                         ; when Smex is auto-initialized on its first run.
 
-(global-unset-key (kbd "M-x"))
-(global-set-key (kbd "M-x") 'smex)
-(global-unset-key (kbd "M-X"))
-(global-set-key (kbd "M-X") 'smex-major-mode-commands)
+(setq smex-prompt-string "")
+
+(if (eq window-system 'x)
+    (shell-command "xmodmap -e 'clear Lock' -e 'keycode 66 = F13'"))
+
+;; (global-set-key [f13] 'execute-extended-command)
+(global-set-key [f13] 'smex)
+;; TODO: maybe have f13 (caps lock) cancel smex if smex is already up
+
+
+;; (global-unset-key (kbd "M-x"))
+;; (global-set-key (kbd "M-x") 'smex)
+;; (global-unset-key (kbd "M-X"))
+;; (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 ;; This is your old M-x.
 
 ;; this is ugly/lots of visual noise, but ok.
