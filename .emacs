@@ -42,6 +42,7 @@
 
 (desktop-save-mode 1)
 (setq desktop-restore-eager 7)
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-hook 'auto-save-hook 'my-desktop-save)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -129,11 +130,10 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(with-eval-after-load "foo"
-  (toggle-scroll-bar -1)
-  (tool-bar-mode -1)
-  (menu-bar-mode -1)
-  (set-face-attribute 'default nil :height 130))
+(toggle-scroll-bar -1)
+(tool-bar-mode -1)
+(menu-bar-mode 1)
+(set-face-attribute 'default nil :height 130)
 
 (setq column-number-mode t)
 
