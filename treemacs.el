@@ -54,3 +54,7 @@
 (define-derived-mode treemacs-mode special-mode "Treemacs"
   (setq-local mode-line-format neo-mode-line-format)
   (add-hook 'post-command-hook 'force-mode-line-update nil t))
+
+
+;; TODO: make git colors update quicker, and maybe make the whole thing black and white
+;; or less colorful.
