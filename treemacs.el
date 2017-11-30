@@ -2,7 +2,7 @@
 
 (use-package treemacs
   :ensure t
-  :defer nil
+  :defer t
   :config (progn
             (setq treemacs-follow-after-init          t
                   treemacs-width                      28
@@ -21,10 +21,10 @@
             (treemacs-follow-mode t)
             (treemacs-filewatch-mode t)))
 
-(defun treemacs-header-with-brackets (current-root)
-  (format "%s" (file-name-nondirectory current-root)))
+(defun treemacs-header (current-root)
+  (format " %s " (file-name-nondirectory current-root)))
 
-(setq treemacs-header-function #'treemacs-header-with-brackets)
+(setq treemacs-header-function #'treemacs-header)
 
 (setq treemacs-icon-fallback (propertize "  " 'face 'treemacs-term-node-face))
 (setq treemacs-icon-closed (propertize "+ " 'face 'treemacs-term-node-face))
@@ -39,3 +39,18 @@
 ;; TODO: would be nice to color the tree background
 
 ;; (set-face-attribute 'hl-line nil :foreground "black" :background "yellow")
+
+
+(defun git-on-branch ()
+  (let ((default-directory (treemacs--current-root))
+        (branch (shell-command-to-string "git branch | grep '*'")))
+    (if (< 11 (length branch))
+        (concat " " (substring branch 7 -4))
+      "")))
+
+(defvar neo-mode-line-format
+  (list '(:eval (git-on-branch))))
+
+(define-derived-mode treemacs-mode special-mode "Treemacs"
+  (setq-local mode-line-format neo-mode-line-format)
+  (add-hook 'post-command-hook 'force-mode-line-update nil t))

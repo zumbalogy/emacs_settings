@@ -34,8 +34,9 @@
   (load "~/emacs/editing.el")
   (load "~/emacs/tabs.el")
   (load "~/emacs/treemacs.el")
+  (load "~/emacs/mode_line.el")
   ;; (load "~/emacs/neotree.el")
-  ;; (load "~/emacs/mode_line.el")
+  ;; (load "~/emacs/mode_line_collapse.el")
   )
 
 
