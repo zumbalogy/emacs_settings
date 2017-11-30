@@ -143,6 +143,8 @@
 (global-unset-key [(control t)])
 (global-set-key [(control t)] 'fiplr-find-file)
 
+; TODO: have this also look at current open buffers
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun my-command-error-function (data context caller)
