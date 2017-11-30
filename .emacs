@@ -7,21 +7,54 @@
 ;; TODO: have a file that i run only the first time i run emacs
 ;; (or have touched config files)
 
-;; (require 'package)
-;; (require 'desktop)
+(require 'package)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(toggle-scroll-bar -1)
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(set-face-attribute 'default nil :height 130)
+
+(setq column-number-mode t)
+
+(setq-default cursor-type 'bar)
+
+(setq-default indent-tabs-mode nil)
+(setq tab-width 2)
+
+;; (show-paren-mode 1) 'package)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (let ((gc-cons-threshold 10000000))
   (package-initialize)
-  (byte-recompile-directory (expand-file-name "~/emacs") 0)
+  ;; (byte-recompile-directory (expand-file-name "~/emacs") 0)
   (load "~/emacs/theme.el")
   (load "~/emacs/editing.el")
   (load "~/emacs/tabs.el")
-  (load "~/emacs/tree.el")
+  (load "~/emacs/treemacs.el")
+  ;; (load "~/emacs/neotree.el")
   ;; (load "~/emacs/mode_line.el")
   )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'desktop)
+
+(defun my-desktop-save ()
+  (interactive)
+  ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
+  ;; (if (eq (desktop-owner) (emacs-pid)) ;; wont work with emacsclient
+  ;;     (desktop-save desktop-dirname)))
+  (desktop-save desktop-dirname))
+
+(desktop-save-mode 1)
+(setq desktop-restore-eager 12)
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
+(add-hook 'auto-save-hook 'my-desktop-save)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -32,20 +65,7 @@
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun my-desktop-save ()
-   (interactive)
-   ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
-  (if (eq (desktop-owner) (emacs-pid))
-      (desktop-save desktop-dirname)))
-
-(desktop-save-mode 1)
-(setq desktop-restore-eager 7)
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
-(add-hook 'auto-save-hook 'my-desktop-save)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun save-all ()
   (interactive)
@@ -63,6 +83,10 @@
 ;; also make it kill the buffer for real (and save) when i say kill the buffer
 
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq tooltip-use-echo-area t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -128,22 +152,6 @@
 
 (setq command-error-function #'my-command-error-function)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(toggle-scroll-bar -1)
-(tool-bar-mode -1)
-(menu-bar-mode 1)
-(set-face-attribute 'default nil :height 130)
-
-(setq column-number-mode t)
-
-(setq-default cursor-type 'bar)
-
-(setq-default indent-tabs-mode nil)
-(setq tab-width 2)
-
-;; (show-paren-mode 1) 'package)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; scroll one line at a time (less "jumpy" than defaults)
@@ -196,7 +204,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (fiplr undo-tree use-package treemacs-projectile tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters neotree multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking cider atom-one-dark-theme))))
+    (desktop+ fiplr undo-tree use-package treemacs-projectile tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters neotree multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking cider atom-one-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -48,8 +48,17 @@ TODO
 ;; https://github.com/syohex/emacs-git-gutter
 ;; https://www.emacswiki.org/emacs/SpeedBar
 
+;; TODO: control t not finding new files
+
+;; get undo tree mode out of modeline, not needed.
+;; maybe get -:@**- thingy out of it too, restly the git branch thing to not say "git"
+;; and maybe have file pathname be longer, as to lessen need for treemacs
+
+;; treemacs could have modeline info like neotree does. maybe git branch
+
+;; TODO: get emacsclient and emacs --daemon working with loaded the config files in a smart way
+;; and restoring the session. cuts start up time in less than half, which is nice.
 
 these are the current packages i have downloaded:
-
 
 (icicles atom-one-dark-theme cider clojure-mode-extra-font-locking clojure-mode color-theme-buffer-local color-theme doom-themes all-the-icons el-get font-lock+ memoize minibuffer-line multiple-cursors neotree queue rainbow-delimiters seq smex smooth-scroll smooth-scrolling spinner symon tabbar treemacs-projectile treemacs hydra pfuture ace-window avy f s dash projectile pkg-info epl undo-tree use-package diminish bind-key)
