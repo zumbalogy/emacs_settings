@@ -1,3 +1,5 @@
+(require 'treemacs)
+
 (use-package treemacs
   :ensure t
   :defer nil
@@ -15,7 +17,6 @@
                   treemacs-never-persist              nil
                   treemacs-is-never-other-window      t
                   treemacs-goto-tag-strategy          'refetch-index
-                  treemacs-icons-hash                 (make-hash)
                   )
             (treemacs-follow-mode t)
             (treemacs-filewatch-mode t)))
@@ -28,12 +29,10 @@
 (setq treemacs-icon-fallback (propertize "  " 'face 'treemacs-term-node-face))
 (setq treemacs-icon-closed (propertize "+ " 'face 'treemacs-term-node-face))
 (setq treemacs-icon-open (propertize "- " 'face 'treemacs-term-node-face))
+(setq treemacs-icons-hash (make-hash-table))
 
-;; (with-eval-after-load "treemacs"
-;;   (maphash (lambda (key value)
-;;              (puthash key treemacs-icon-fallback treemacs-icons-hash))
-;;            treemacs-icons-hash)
-;;   (define-key treemacs-mode-map [mouse-1] 'treemacs-visit-node-default-action))
+(with-eval-after-load "treemacs"
+  (define-key treemacs-mode-map [mouse-1] 'treemacs-visit-node-default-action))
 
 ;; TODO: have it follow version control of a buffer
 ;; TODO: hide "Treemacs" text from the modeline (maybe show git branch)
