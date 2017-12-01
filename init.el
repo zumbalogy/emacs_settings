@@ -93,13 +93,15 @@
 
 (defun save-and-kill-this-buffer ()
   (interactive)
-  (save-buffer)
+  (unless (string-equal "*" (substring (buffer-name) 0 1))
+    (save-buffer))
   (kill-this-buffer))
 
 ;; https://emacs.stackexchange.com/questions/3330/how-to-reopen-just-killed-buffer-like-c-s-t-in-firefox-browser
 (defvar killed-file-list nil
   "List of recently killed files.")
 
+;; TODO: have the kill-file-list capped at 24 files or so
 (defun add-file-to-killed-file-list ()
   "If buffer is associated with a file name, add that file to the
 `killed-file-list' when killing the buffer."
@@ -134,6 +136,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; TODO: maybe make it so it ignores git ignored things by default
+;; TODO: maybe set it to not move the file when the cursor is beneath the fold of where
+;;     the selector minibuffer thing is coming up
+;; TODO: look into problems with duplicate buffer/file names
+
 
 (require 'fiplr)
 
@@ -156,6 +162,25 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
                                     (split-string list-string "[\r\n]+" t)
                                     :initial-value '()))))
     (delete-dups (append buffers files))))
+
+(defun my-flipr-find-file (root-dir file)
+  (let ((buffers (mapcar (function buffer-name) (buffer-list))))
+    (if (member file buffers)
+        (switch-to-buffer file)
+      (find-file (concat root-dir file)))))
+
+(defun fiplr-find-file-in-directory
+    (path ignored-globs &optional find-file-function)
+  (let* ((root-dir (file-name-as-directory path))
+         (index (fiplr-get-index 'files root-dir ignored-globs))
+         (file (minibuffer-with-setup-hook
+                   (lambda ()
+                     (fiplr-mode 1))
+                 (grizzl-completing-read (format "Find in project (%s)" root-dir)
+                                         index))))
+    (if (eq this-command 'fiplr-reload-list) ; exited for reload
+        (fiplr-reload-list)
+      (my-flipr-find-file root-dir file))))
 
 
 (setq fiplr-ignored-globs

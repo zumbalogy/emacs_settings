@@ -1,5 +1,3 @@
-;; NOTE: scroll to cycle though tab groups
-
 (require 'tabbar)
 
 (tabbar-mode 1)

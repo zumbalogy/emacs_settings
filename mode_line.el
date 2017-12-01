@@ -14,9 +14,7 @@
     mode-line-misc-info
     mode-line-end-spaces))
 
-
 (setq-default mode-line-format my-mode-line)
-
 
 ;; TODO: get rid of minor modes i dont like in the modeline (like undo tree)
 ;; https://emacs.stackexchange.com/questions/3925/hide-list-of-minor-modes-in-mode-line

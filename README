@@ -2,6 +2,8 @@
 
 TODO
 
+;; Make sure the emacs ~ and the .~undo-tree~ files get cleaned up.
+;;      this might be solved if i do all my file managment via emacs
 ;; comment and uncomment block/s-exp via control slash.
 ;; dont have mode line print if im doing a search though text
 ;; autosave before quit
