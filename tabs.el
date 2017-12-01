@@ -64,9 +64,9 @@ That is, a string used to represent it on the tab bar."
 
 (setq tabbar-buffer-groups-function 'my-tabbar-buffer-groups)
 
-(defun my-filter (condp lst)
-  (delq nil
-        (mapcar (lambda (x) (and (funcall condp x) x)) lst)))
+;; (defun my-filter (condp lst)
+;;   (delq nil
+;;         (mapcar (lambda (x) (and (funcall condp x) x)) lst)))
 
 (setq *tabbar-ignore-buffers* '("*Treemacs*"
                                 "*Messages*"

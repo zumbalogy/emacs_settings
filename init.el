@@ -114,7 +114,6 @@
   (when killed-file-list
     (find-file (pop killed-file-list))))
 
-
 (global-set-key [(control w)] 'save-and-kill-this-buffer)
 (global-set-key [(control shift t)] 'reopen-killed-file)
 
@@ -136,8 +135,32 @@
 
 ;; TODO: maybe make it so it ignores git ignored things by default
 
-(setq fiplr-ignored-globs '((directories (".git" ".svn" ".hg" ".bzr" "target"))
-                            (files (".#*" "*~" "*.so" "*.o" "*.jpg" "*.png" "*.gif" "*.pdf" "*.gz" "*.zip"))))
+(require 'fiplr)
+
+(require 'cl)
+;; TODO: remove CL dependancy
+(defun fiplr-list-files (type path ignored-globs)
+  "Expands to a flat list of files/directories found under PATH.
+The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
+  (let* ((prefix (file-name-as-directory (file-truename path)))
+         (prefix-length (length prefix))
+         (buffers (mapcar (function buffer-name) (buffer-list)))
+         (list-string (shell-command-to-string (fiplr-list-files-shell-command
+                                                type
+                                                prefix
+                                                ignored-globs)))
+         (files (reverse (cl-reduce (lambda (acc file)
+                                      (if (> (length file) prefix-length)
+                                          (cons (substring file prefix-length) acc)
+                                        acc))
+                                    (split-string list-string "[\r\n]+" t)
+                                    :initial-value '()))))
+    (delete-dups (append buffers files))))
+
+
+(setq fiplr-ignored-globs
+      '((directories (".git" ".svn" ".hg" ".bzr" "target"))
+        (files (".#*" "*~" "*.so" "*.o" "*.jpg" "*.png" "*.gif" "*.pdf" "*.gz" "*.zip"))))
 
 
 (global-unset-key [(control t)])
