@@ -129,12 +129,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(global-undo-tree-mode)
-
-(setq undo-tree-auto-save-history t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; TODO: maybe make it so it ignores git ignored things by default
 ;; TODO: maybe set it to not move the file when the cursor is beneath the fold of where
 ;;     the selector minibuffer thing is coming up

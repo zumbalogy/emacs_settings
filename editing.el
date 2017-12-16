@@ -71,17 +71,46 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defvar undo-tree-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [remap undo] 'undo-tree-undo)
+    (define-key map [remap undo-only] 'undo-tree-undo)
+    (define-key map [remap redo] 'undo-tree-redo)
+    (define-key map (kbd "C-?") 'undo-tree-redo)
+    (define-key map (kbd "M-_") 'undo-tree-redo)
+    (define-key map (kbd "\C-x u") 'undo-tree-visualize)
+    (define-key map (kbd "\C-x u") 'undo-tree-visualize)
+    (define-key map (kbd "C-x r u") 'undo-tree-save-state-to-register)
+    (define-key map (kbd "C-x r U") 'undo-tree-restore-state-from-register)
+    map))
+
+(global-undo-tree-mode)
+(setq undo-tree-auto-save-history t)
+
+(global-unset-key (kbd "C-z"))
+(global-set-key (kbd "C-z") 'undo-tree-undo)
+
+(global-unset-key (kbd "C-y"))
+(global-set-key (kbd "C-y") 'undo-tree-redo)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun toggle-comment ()
-    "Comments or uncomments the region or the current line if there's no active region."
-    (interactive)
-    (let (beg end)
-        (if (region-active-p)
-            (setq beg (region-beginning) end (region-end))
-            (setq beg (line-beginning-position) end (line-end-position)))
-        (comment-or-uncomment-region beg end)))
+  "Comments or uncomments the region or the current line if there's no active region."
+  (interactive)
+  (let (beg end)
+    (if (region-active-p)
+        (setq beg (region-beginning) end (region-end))
+      (setq beg (line-beginning-position) end (line-end-position)))
+    (comment-or-uncomment-region beg end)))
 
 (global-unset-key (kbd "C-;"))
 (global-set-key (kbd "C-;") 'toggle-comment)
+
+(global-unset-key [?\C-/])
+(global-unset-key (kbd "C-/"))
+(global-set-key [?\C-/] 'toggle-comment)
+(global-set-key (kbd "C-/") 'toggle-comment)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
