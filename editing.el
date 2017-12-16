@@ -76,7 +76,6 @@
     (define-key map [remap undo] 'undo-tree-undo)
     (define-key map [remap undo-only] 'undo-tree-undo)
     (define-key map [remap redo] 'undo-tree-redo)
-    (define-key map (kbd "C-?") 'undo-tree-redo)
     (define-key map (kbd "M-_") 'undo-tree-redo)
     (define-key map (kbd "\C-x u") 'undo-tree-visualize)
     (define-key map (kbd "\C-x u") 'undo-tree-visualize)
@@ -95,22 +94,40 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun toggle-comment ()
-  "Comments or uncomments the region or the current line if there's no active region."
-  (interactive)
-  (let (beg end)
-    (if (region-active-p)
-        (setq beg (region-beginning) end (region-end))
-      (setq beg (line-beginning-position) end (line-end-position)))
-    (comment-or-uncomment-region beg end)))
+;; TODO: This does not write comment on empty line, and also does not
+;; keep things highlighted
+(defun my-comment-line (n)
+  (interactive "p")
+  (if (use-region-p)
+      (comment-or-uncomment-region
+       (save-excursion
+         (goto-char (region-beginning))
+         (line-beginning-position))
+       (save-excursion
+         (goto-char (region-end))
+         (line-end-position)))
+    (when (and (eq last-command 'comment-line-backward)
+               (natnump n))
+      (setq n (- n)))
+    (let ((range
+           (list (line-beginning-position)
+                 ;; (goto-char (line-end-position n)))))
+                 (line-end-position n))))
+      (comment-or-uncomment-region
+       (apply #'min range)
+       (apply #'max range)))
+    ;; (forward-line 1)
+    ;; (back-to-indentation)
+    (unless (natnump n)
+      (setq this-command 'comment-line-backward))))
 
 (global-unset-key (kbd "C-;"))
-(global-set-key (kbd "C-;") 'toggle-comment)
+(global-set-key (kbd "C-;") 'my-comment-line)
 
-(global-unset-key [?\C-/])
 (global-unset-key (kbd "C-/"))
-(global-set-key [?\C-/] 'toggle-comment)
-(global-set-key (kbd "C-/") 'toggle-comment)
+(global-set-key (kbd "C-/") 'my-comment-line)
+
+;; Maybe should have have control shift slash insert comment mid-line
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
