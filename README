@@ -1,5 +1,7 @@
 TODO
 
+;; made desktop save restore treemacs (or just default to it on)
+;; get a font with slashed zeros
 ;; Make sure the emacs ~ and the .~undo-tree~ files get cleaned up.
 ;;      this might be solved if i do all my file managment via emacs
 ;; dont have mode line print if im doing a search though text

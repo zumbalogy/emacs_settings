@@ -32,13 +32,13 @@
   ;; (byte-recompile-directory (expand-file-name "~/emacs") 0)
   (load "~/emacs/theme.el")
   (load "~/emacs/editing.el")
-  (load "~/emacs/tabs.el")
+  ;; (load "~/emacs/tabs.el")
   (load "~/emacs/treemacs.el")
+  (load "~/emacs/mode_line_tabs.el")
   (load "~/emacs/mode_line.el")
   ;; (load "~/emacs/neotree.el")
   ;; (load "~/emacs/mode_line_collapse.el")
   )
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
