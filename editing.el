@@ -140,13 +140,13 @@
                       (buffer-substring (region-beginning) (region-end))
                     (prog1 (thing-at-point 'line)
                       (end-of-line)
-                      (if (< 0 (forward-line 1)) ;Go to beginning of next line, or make a new one
+                      (if (< 0 (forward-line 1)) ;Goto start of next or new line
                           (newline))))))
-        (dotimes (i (abs (or n 1)))     ;Insert N times, or once if not specified
+        (dotimes (i (abs (or n 1)))
           (insert text))))
-    (if use-region nil                  ;Only if we're working with a line (not a region)
+    (if use-region nil               ;Only if working with a line, not a region
       (let ((pos (- (point) (line-beginning-position)))) ;Save column
-        (if (> 0 n)                             ;Comment out original with negative arg
+        (if (> 0 n)                     ;Comment out original with negative arg
             (comment-region (line-beginning-position) (line-end-position)))
         (forward-line 1)
         (forward-char pos)))))
@@ -154,11 +154,11 @@
 (global-unset-key (kbd "C-S-d"))
 (global-set-key (kbd "C-S-d") 'duplicate-line-or-region)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun quick-cut-line ()
-  "Cut the whole line that point is on.  Consecutive calls to this command append each line to the kill-ring."
+  "Cut the whole line that point is on.  Consecutive calls to this command
+    append each line to the kill-ring."
   (interactive)
   (let ((beg (line-beginning-position 1))
 	(end (line-beginning-position 2)))
@@ -175,7 +175,7 @@
 ;; make this line or region
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
 (defun move-text-internal (arg)
