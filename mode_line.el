@@ -17,13 +17,13 @@
     ;; mode-line-frame-identification
     ;; mode-line-buffer-identification
     ;; "    "
-    " "
+    ;; " "
     ;; mode-line-position
-    "%c:%l:%i"
+    ;; "%c:%l"
     ;; (vc-mode vc-mode)
     ;; mode-line-modes
     ;; "%m" ;; major mode
-    mode-line-misc-info
+    ;; mode-line-misc-info
     ;; mode-line-end-spaces
     ))
 
@@ -37,7 +37,7 @@
    (buffer-list)))
 
 (defun mode-line-split (left right)
-  (let* ((available-width (- (window-width) (length left) 1)))
+  (let* ((available-width (- (window-width) (length left) -3))) ; linenums push this 3
     ;; (format (format "%%s %%%ds" available-width) left right)))
     (format (format "%%s%%%ds" available-width) left right)))
 

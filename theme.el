@@ -26,3 +26,11 @@
 
 ;; (set-face-background 'vertical-border "red")
 (set-face-foreground 'vertical-border "gray")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(global-linum-mode 1)
+
+(setq linum-format "%-3d ")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

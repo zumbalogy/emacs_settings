@@ -185,7 +185,8 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 (global-unset-key [(control t)])
 (global-set-key [(control t)] 'fiplr-find-file)
 
-; TODO: have this also look at current open buffers
+;; TODO: have this also look at current open buffers
+;; TODO: be able to write line number to jump to
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
