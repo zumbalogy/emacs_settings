@@ -215,3 +215,15 @@
 (global-set-key (kbd "C-S-<down>") 'move-text-down)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun nonbreaking-return (&optional n)
+  (interactive "*p")
+  (let ((use-region (use-region-p)))
+    (end-of-line)
+    (newline)))
+
+(with-eval-after-load 'cua-base
+  (define-key cua-global-keymap [C-return] nil)
+  (global-set-key [(C-return)] 'nonbreaking-return))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
