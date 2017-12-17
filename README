@@ -7,7 +7,6 @@ TODO
 ;; dont have mode line print if im doing a search though text
 ;; autosave before quit
 ;; select all
-;; equvalent of atom control enter, insert new line below current one and put cursor on it. dont break current line
 ;; control-d (or such) to select current word/thing and
 ;;     control-d while something is selected to also select next occcurence, w/ mutli cursor
 ;; multiple cursors
