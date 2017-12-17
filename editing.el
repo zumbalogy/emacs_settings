@@ -127,8 +127,6 @@
 (global-unset-key (kbd "C-/"))
 (global-set-key (kbd "C-/") 'my-comment-line)
 
-;; Maybe should have have control shift slash insert comment mid-line
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun duplicate-line-or-region (&optional n)
