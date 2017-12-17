@@ -45,8 +45,8 @@
   (let* ((n (concat " " name " "))
          (selected (string= name (buffer-name (current-buffer)))))
     (if selected
-        (propertize n 'face '(:foreground "#4466bb" :background "#000000"))
-        (propertize n 'face '(:foreground "#666666" :background "#111111")))))
+        (propertize n 'face '(:foreground "#4466bb" :box '(:line-width 5 :color "gray80")))
+        (propertize n 'face '(:foreground "#666666" :box '(:line-width 5 :color "gray80"))))))
 
 (defun mode-line-tabs ()
   (let* ((buffers (mode-buffers))
