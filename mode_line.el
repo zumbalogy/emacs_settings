@@ -27,7 +27,6 @@
     ;; mode-line-end-spaces
     ))
 
-
 (require 'cl) ;; TODO: rewrite this to not need cl
 (defun mode-buffers ()
   (remove-if
@@ -37,16 +36,25 @@
                 thereis (string-equal (buffer-name buffer) name))))
    (buffer-list)))
 
-
 (defun mode-line-split (left right)
   (let* ((available-width (- (window-width) (length left) 1)))
     ;; (format (format "%%s %%%ds" available-width) left right)))
     (format (format "%%s%%%ds" available-width) left right)))
 
+(defun propertize-name (name)
+  (let* ((n (concat " " name " "))
+         (selected (string= name (buffer-name (current-buffer)))))
+    (if selected
+        (propertize n 'face '(:foreground "#336699" :background "#000000"))
+        (propertize n 'face '(:foreground "#666666" :background "#111111")))))
+
 (defun mode-line-tabs ()
   (let* ((buffers (mode-buffers))
-         (names (mapconcat 'buffer-name buffers "  ")))
-    names))
+         (names (mapcar 'buffer-name buffers))
+         (sorted-names (sort names 'string<))
+         (color-names (mapcar 'propertize-name sorted-names))
+         (output (mapconcat 'identity color-names " ")))
+    output))
 
 (setq-default mode-line-format
               '((:eval
