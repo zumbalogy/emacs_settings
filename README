@@ -61,3 +61,7 @@ TODO
 these are the current packages i have downloaded:
 
 (icicles atom-one-dark-theme cider clojure-mode-extra-font-locking clojure-mode color-theme-buffer-local color-theme doom-themes all-the-icons el-get font-lock+ memoize minibuffer-line multiple-cursors neotree queue rainbow-delimiters seq smex smooth-scroll smooth-scrolling spinner symon tabbar treemacs-projectile treemacs hydra pfuture ace-window avy f s dash projectile pkg-info epl undo-tree use-package diminish bind-key)
+
+
+TODO: maybe control-t (find file thing) should just put me in home/ (like control-x f)
+if its not in a git repo. (or should have a list of previously used files or something)

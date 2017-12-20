@@ -34,8 +34,12 @@
 
 (add-hook 'treemacs-mode-hook '(lambda () (linum-mode -1)))
 
+(require 'color-theme-buffer-local)
+(load-theme 'simple-1 t t)
+
 (with-eval-after-load "treemacs"
   (treemacs-restore)
+  (load-theme-buffer-local 'simple-1 (get-buffer "*Treemacs*"))
   (define-key treemacs-mode-map [mouse-1] 'treemacs-visit-node-default-action))
 
 ;; TODO: have it follow version control of a buffer

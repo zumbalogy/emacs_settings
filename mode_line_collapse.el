@@ -88,7 +88,5 @@
 
 (symon-mode)
 
-
-
 (with-current-buffer " *Echo Area*" (face-remap-add-relative 'default :background "#222"))
 (with-current-buffer " *Echo Area 1*" (face-remap-add-relative 'default :background "#222"))

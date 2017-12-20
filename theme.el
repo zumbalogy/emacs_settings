@@ -25,14 +25,21 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; (set-face-background 'vertical-border "red")
-(set-face-foreground 'vertical-border "gray")
+(set-face-foreground 'vertical-border "#000")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (global-linum-mode 1)
 
-(setq linum-format "%-3d ")
+(setq linum-format "%3d ")
 
 ;; TODO: look into line numbers not showing up on newlines at bottom of file
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq-default line-spacing 4)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (require 'color-theme-buffer-local)
+;; (add-hook 'foo-mode-hook (lambda nil (color-theme-buffer-local 'color-theme-robin-hood (current-buffer)) ))

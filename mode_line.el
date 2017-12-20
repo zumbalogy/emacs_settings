@@ -45,8 +45,14 @@
   (let* ((n (concat " " name " "))
          (selected (string= name (buffer-name (current-buffer)))))
     (if selected
-        (propertize n 'face '(:foreground "#4466bb" :box '(:line-width 5 :color "gray80")))
-        (propertize n 'face '(:foreground "#666666" :box '(:line-width 5 :color "gray80"))))))
+        ;; (propertize n 'face '(:foreground "#4466bb" :box '(:line-width 5 :color "gray80")))
+        (propertize n 'face '(:foreground "#4466bb" ))
+      ;; (propertize n 'face '(:foreground "#666666" :box '(:line-width 5 :color "gray80"))))))
+      (propertize n 'face '(:foreground "#666666" )))))
+;; TODO: boxes make the tabs twitch a pixel when adding and removing them
+;; need something like border-box. same thing with it being a pixel too tall too, to line up with
+;; treemacs buffer, though could give treemacs modeline a 1 pixel invisble border to match
+
 
 (defun mode-line-tabs ()
   (let* ((buffers (mode-buffers))
