@@ -31,7 +31,7 @@
 (defun mode-buffers ()
   (remove-if
    (lambda (buffer)
-     (and (not (eq (current-buffer) buffer)) ; Always include the current buffer.
+     (and (not (eq (current-buffer) buffer)) ;Always include the current buffer.
           (loop for name in *tabbar-ignore-buffers* ;remove buffer name in this list.
                 thereis (string-equal (buffer-name buffer) name))))
    (buffer-list)))
@@ -61,3 +61,7 @@
                 (mode-line-split
                  (format-mode-line 'mode-line-details)
                  (mode-line-tabs)))))
+
+
+;; Can put it in the echo area like this
+;; (message "%s" (format-mode-line mode-line-format))

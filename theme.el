@@ -33,4 +33,6 @@
 
 (setq linum-format "%-3d ")
 
+;; TODO: look into line numbers not showing up on newlines at bottom of file
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

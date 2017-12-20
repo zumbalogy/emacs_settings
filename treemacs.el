@@ -1,4 +1,5 @@
 (require 'treemacs)
+(require 'treemacs-persist)
 
 (use-package treemacs
   :ensure t
@@ -31,7 +32,10 @@
 (setq treemacs-icon-open (propertize "- " 'face 'treemacs-term-node-face))
 (setq treemacs-icons-hash (make-hash-table))
 
+(add-hook 'treemacs-mode-hook '(lambda () (linum-mode -1)))
+
 (with-eval-after-load "treemacs"
+  (treemacs-restore)
   (define-key treemacs-mode-map [mouse-1] 'treemacs-visit-node-default-action))
 
 ;; TODO: have it follow version control of a buffer
@@ -40,7 +44,6 @@
 
 ;; (set-face-attribute 'hl-line nil :foreground "black" :background "yellow")
 
-
 (defun git-on-branch ()
   (let ((default-directory (treemacs--current-root))
         (branch (shell-command-to-string "git branch | grep '*'")))
@@ -48,13 +51,13 @@
         (concat " " (substring branch 7 -4))
       "")))
 
-(defvar neo-mode-line-format
+(defvar tree-mode-line-format
   (list '(:eval (git-on-branch))))
 
 (define-derived-mode treemacs-mode special-mode "Treemacs"
-  (setq-local mode-line-format neo-mode-line-format)
+  (setq-local mode-line-format tree-mode-line-format)
   (add-hook 'post-command-hook 'force-mode-line-update nil t))
 
 
-;; TODO: make git colors update quicker, and maybe make the whole thing black and white
+;; todo: make git colors update quicker, and maybe make the whole thing black and white
 ;; or less colorful.

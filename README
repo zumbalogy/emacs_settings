@@ -40,6 +40,14 @@ TODO
 ;; https://www.emacswiki.org/emacs/Icicles
 ;; https://github.com/syohex/emacs-git-gutter
 ;; https://www.emacswiki.org/emacs/SpeedBar
+;; ivy completion (or other autocomplete thing)
+;; https://github.com/abo-abo/lispy
+
+;; https://github.com/Malabarba/aggressive-indent-mode
+;; https://github.com/Fanael/persistent-scratch
+;; https://github.com/bburns/clipmon
+;; https://github.com/clojure-emacs/squiggly-clojure
+
 
 ;; TODO: control t not finding new files
 

@@ -56,7 +56,6 @@
 ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-hook 'auto-save-hook 'my-desktop-save)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
@@ -134,7 +133,6 @@
 ;;     the selector minibuffer thing is coming up
 ;; TODO: look into problems with duplicate buffer/file names
 
-
 (require 'fiplr)
 
 (require 'cl)
@@ -180,7 +178,6 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 (setq fiplr-ignored-globs
       '((directories (".git" ".svn" ".hg" ".bzr" "target"))
         (files (".#*" "*~" "*.so" "*.o" "*.jpg" "*.png" "*.gif" "*.pdf" "*.gz" "*.zip"))))
-
 
 (global-unset-key [(control t)])
 (global-set-key [(control t)] 'fiplr-find-file)
@@ -237,12 +234,21 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 
 ;; this is ugly/lots of visual noise, but ok.
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; https://www.masteringemacs.org/article/improving-performance-emacs-display-engine
 (setq redisplay-dont-pause t)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun display-startup-echo-area-message ()
+  (message (current-time-string)))
+
+(setq inhibit-startup-message nil)
+(setq inhibit-startup-screen t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -250,7 +256,7 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (delight desktop+ fiplr undo-tree use-package treemacs-projectile tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters neotree multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking cider atom-one-dark-theme))))
+    (coffee-mode delight desktop+ fiplr undo-tree use-package treemacs-projectile tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters neotree multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking cider atom-one-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

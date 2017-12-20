@@ -44,3 +44,4 @@
 
 (global-set-key [(control shift tab)] 'tabbar-backward-tab)
 (global-set-key [(control tab)] 'tabbar-forward-tab)
+
