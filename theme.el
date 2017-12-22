@@ -43,3 +43,12 @@
 
 ;; (require 'color-theme-buffer-local)
 ;; (add-hook 'foo-mode-hook (lambda nil (color-theme-buffer-local 'color-theme-robin-hood (current-buffer)) ))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(set-face-background 'mode-line-inactive "#1c1e24") ; to match active one
+;; TODO: right now anything darker or lighter kinda looks like the inactive
+;; buffer is the active buffer. so, i should make some way of representing that and all
+;; maybe have current line (or linum) highlighted or something
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

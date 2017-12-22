@@ -35,17 +35,18 @@
 (add-hook 'treemacs-mode-hook '(lambda () (linum-mode -1)))
 
 (require 'color-theme-buffer-local)
-(load-theme 'simple-1 t t)
+(add-to-list 'custom-theme-load-path
+             (file-name-as-directory "~/emacs/themes"))
+(load-theme 'my-treemacs t t)
 
 (with-eval-after-load "treemacs"
   (treemacs-restore)
-  (load-theme-buffer-local 'simple-1 (get-buffer "*Treemacs*"))
+  (load-theme-buffer-local 'my-treemacs (get-buffer "*Treemacs*"))
   (define-key treemacs-mode-map [mouse-1] 'treemacs-visit-node-default-action))
 
 ;; TODO: have it follow version control of a buffer
 ;; TODO: hide "Treemacs" text from the modeline (maybe show git branch)
 ;; TODO: would be nice to color the tree background
-
 ;; (set-face-attribute 'hl-line nil :foreground "black" :background "yellow")
 
 (defun git-on-branch ()
@@ -61,7 +62,6 @@
 (define-derived-mode treemacs-mode special-mode "Treemacs"
   (setq-local mode-line-format tree-mode-line-format)
   (add-hook 'post-command-hook 'force-mode-line-update nil t))
-
 
 ;; todo: make git colors update quicker, and maybe make the whole thing black and white
 ;; or less colorful.

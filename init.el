@@ -19,7 +19,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("daeaa8249f0c275de9e32ed822e82ff40457dabe07347fe06afc67d962a3b1e9" "57d7e8b7b7e0a22dc07357f0c30d18b33ffcbb7bcd9013ab2c9f70748cfa4838" default)))
+    ("d56c707f683d5904415886a08f09c6b4724a3601477a7dbec1a15bc722935727" "" default)))
  '(package-selected-packages
    (quote
     (color-theme-modern load-theme-buffer-local coffee-mode delight desktop+ fiplr undo-tree use-package treemacs-projectile tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters neotree multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking cider atom-one-dark-theme))))
@@ -55,9 +55,9 @@
   (load "~/emacs/theme.el")
   (load "~/emacs/editing.el")
   ;; (load "~/emacs/tabs.el")
-  (load "~/emacs/treemacs.el")
   (load "~/emacs/mode_line_tabs.el")
   (load "~/emacs/mode_line.el")
+  (load "~/emacs/treemacs.el")
   ;; (load "~/emacs/neotree.el")
   ;; (load "~/emacs/mode_line_collapse.el")
   )
