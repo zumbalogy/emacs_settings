@@ -22,12 +22,6 @@
  '(package-selected-packages
    (quote
     (color-theme-modern load-theme-buffer-local coffee-mode delight desktop+ fiplr undo-tree use-package treemacs-projectile tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters neotree multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking cider atom-one-dark-theme))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -113,9 +107,11 @@
 
 (defun save-and-kill-this-buffer ()
   (interactive)
-  (unless (string-equal "*" (substring (buffer-name) 0 1))
+  (unless (or (string-equal "*" (substring (buffer-name) 0 1))
+              (string-equal " *" (substring (buffer-name) 0 2)))
     (save-buffer))
-  (kill-this-buffer))
+  (unless (string-equal "*Treemacs*" (buffer-name))
+    (kill-this-buffer)))
 
 ;; https://emacs.stackexchange.com/questions/3330/how-to-reopen-just-killed-buffer-like-c-s-t-in-firefox-browser
 (defvar killed-file-list nil
