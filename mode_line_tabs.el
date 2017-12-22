@@ -42,6 +42,5 @@
                       thereis (string-equal (buffer-name buffer) name))))
          (buffer-list))))
 
-(global-set-key [(control shift tab)] 'tabbar-backward-tab)
-(global-set-key [(control tab)] 'tabbar-forward-tab)
-
+(global-set-key (kbd "C-S-<iso-lefttab>") 'tabbar-backward-tab)
+(global-set-key (kbd "C-<tab>") 'tabbar-forward-tab)

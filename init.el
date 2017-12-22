@@ -215,7 +215,6 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq scroll-step 1) ;; keyboard scroll one line at a time
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; TODO: look into window-divider-mode

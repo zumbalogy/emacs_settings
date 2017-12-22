@@ -70,10 +70,6 @@ if its not in a git repo. (or should have a list of previously used files or som
 TODO: https://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html
  would maybe be better than redefining some functions that i redefine
 
-TODO: make control shift tab go to previous tab
-
-TODO: make default list for my control-t (smex or whatever) not be longer than one line
-
 TODO: make control enter go onto next line with indentation
 
 TODO: make control T completion minibuffer prettier
