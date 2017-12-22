@@ -52,3 +52,23 @@
 ;; maybe have current line (or linum) highlighted or something
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(dolist (buf '(" *Echo Area 0*" " *Echo Area 1*"))
+  (with-current-buffer (get-buffer buf)
+    (make-local-variable 'face-remapping-alist)
+    (add-to-list 'face-remapping-alist '(default (:foreground "#bbc2cf")))))
+
+(add-hook 'minibuffer-setup-hook
+          (lambda ()
+            (make-local-variable 'face-remapping-alist)
+            (add-to-list 'face-remapping-alist
+                         '(default (:forground "#bbc2cf")))))
+
+;; TODO: if set background, it works far all this except when buffers are changed
+;; and there is just blank space there, and running the echo area code
+;; does not fill it in. but this might not be a problem if i move
+;; tabs (or a default time message) down there.
+;; forground works to set because its only when its blank is it a problem
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -9,7 +9,6 @@
 
 (require 'package)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (custom-set-variables
@@ -29,7 +28,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -208,16 +206,6 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 ;; TODO: have this also look at current open buffers
 ;; TODO: be able to write line number to jump to
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun my-command-error-function (data context caller)
-  "Ignore the buffer-read-only signal; pass the rest to the default handler."
-   (when (not (eq (car data) 'text-read-only))
-     (command-error-default-function data context caller)))
-
-
-(setq command-error-function #'my-command-error-function)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; scroll one line at a time (less "jumpy" than defaults)
@@ -235,9 +223,22 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (require 'smex) ; Not needed if you use package.el
+(require 'smex) ; Not needed if you use package.el
 ;; (smex-initialize) ; Can be omitted. This might cause a (minimal) delay
-                                        ; when Smex is auto-initialized on its first run.
+;;                                         ; when Smex is auto-initialized on its first run.
+
+
+;; To change ido-max-prospects. TODO: make this custom and submit pull request to
+;; https://github.com/nonsequitur/smex
+(defun smex-completing-read (choices initial-input)
+  (let ((ido-completion-map ido-completion-map)
+        (ido-setup-hook (cons 'smex-prepare-ido-bindings ido-setup-hook))
+        (ido-enable-prefix nil)
+        (ido-enable-flex-matching smex-flex-matching)
+        (ido-max-prospects 6)
+        (minibuffer-completion-table choices))
+    (ido-completing-read (smex-prompt-with-prefix-arg) choices nil nil
+                         initial-input 'extended-command-history (car choices))))
 
 (setq smex-prompt-string "")
 
@@ -271,3 +272,19 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 (setq inhibit-startup-screen t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(defun my-command-error-function (data context caller)
+  "Ignore the buffer-read-only signal; pass the rest to the default handler."
+  (when (and (not (eq (car data) 'text-read-only))
+             (not (eq (car data) 'text-read-only)))
+    (command-error-default-function data context caller)))
+
+(setq command-error-function #'my-command-error-function)
+
+;; TODO: filter out messages like: beginning of buffer, end of buffer, quit, buffer is read only,
+;;   command attempted to open minibuffer inside minibuffer
+;; maybe loading messages as well. maybe save ones.
+;; http://user.it.uu.se/~embe8573/conf/emacs-init/error.el
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
