@@ -43,7 +43,7 @@
 
 (let ((gc-cons-threshold 10000000))
   (package-initialize)
-  ;; (byte-recompile-directory (expand-file-name "~/emacs") 0)
+  (byte-recompile-directory (expand-file-name "~/emacs") 0)
   (load "~/emacs/theme.el")
   (load "~/emacs/editing.el")
   ;; (load "~/emacs/tabs.el")
@@ -152,6 +152,9 @@
 
 (require 'fiplr)
 
+;; TODO: take treemacs out of buffers returned
+;; TODO: maybe have it sort by most recently used by default or something
+
 (require 'cl)
 ;; TODO: remove CL dependancy
 (defun fiplr-list-files (type path ignored-globs)
@@ -194,7 +197,7 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 
 (setq fiplr-ignored-globs
       '((directories (".git" ".svn" ".hg" ".bzr" "target"))
-        (files (".#*" "*~" "*.so" "*.o" "*.jpg" "*.png" "*.gif" "*.pdf" "*.gz" "*.zip"))))
+        (files (".#*" "*~" "*.so" "*.o" "*.jpg" "*.png" "*.gif" "*.pdf" "*.gz" "*.zip" "*.elc"))))
 
 (global-unset-key [(control t)])
 (global-set-key [(control t)] 'fiplr-find-file)

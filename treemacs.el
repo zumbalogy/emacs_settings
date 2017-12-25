@@ -65,3 +65,5 @@
 
 ;; todo: make git colors update quicker, and maybe make the whole thing black and white
 ;; or less colorful.
+
+;; TODO: ignore certain file types (like *.elc)
