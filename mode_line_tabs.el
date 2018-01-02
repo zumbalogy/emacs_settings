@@ -20,6 +20,10 @@
                                 " *Echo Area 1*"
                                 " *Minibuf-0*"
                                 " *Minibuf-1*"
+                                " *cl-connection*"
+                                " *slime-fontify*"
+                                "*inferior-lisp*"
+                                "*slime-events*"
                                 ))
 
 ;; Sort by name

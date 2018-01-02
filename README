@@ -1,6 +1,10 @@
 TODO
 
-;; made desktop save restore treemacs (or just default to it on)
+
+;; have the modeline know if the buffer is linum more or not and ajust accordingly.
+;;   alt, have all buffers have line numbers (though blank files would still make
+;;   it funny
+;; treemacs should retain color on toggle
 ;; get a font with slashed zeros
 ;; Make sure the emacs ~ and the .~undo-tree~ files get cleaned up.
 ;;      this might be solved if i do all my file managment via emacs

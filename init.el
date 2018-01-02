@@ -43,7 +43,7 @@
 
 (let ((gc-cons-threshold 10000000))
   (package-initialize)
-  (byte-recompile-directory (expand-file-name "~/emacs") 0)
+;;  (byte-recompile-directory (expand-file-name "~/emacs") 0)
   (load "~/emacs/theme.el")
   (load "~/emacs/editing.el")
   ;; (load "~/emacs/tabs.el")
@@ -286,3 +286,10 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 ;; http://user.it.uu.se/~embe8573/conf/emacs-init/error.el
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;  (load (expand-file-name "~/quicklisp/slime-helper.el"))
+;;   Replace "sbcl" with the path to your implementation
+;;  (setq inferior-lisp-program "sbcl")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
