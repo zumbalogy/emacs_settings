@@ -217,8 +217,7 @@
   (let ((use-region (use-region-p)))
     (end-of-line)
     (newline)
-    (indent-according-to-mode)
-    ))
+    (indent-according-to-mode)))
 
 (with-eval-after-load 'cua-base
   (define-key cua-global-keymap [C-return] nil)
@@ -226,35 +225,138 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun my-smart-tab (&optional n)
-  (interactive "*p")
-  (parinfer-smart-tab:dwim-right)
-  (parinfer--invoke-parinfer))
+;; (defun my-smart-tab (&optional n)
+;;   (interactive "*p")
+;;   (parinfer-smart-tab:dwim-right)
+;;   (parinfer--invoke-parinfer))
 
-(use-package parinfer
-  :ensure t
-  :bind
-  (:map parinfer-mode-map
-        ("C-," . parinfer-toggle-mode)
-        ("<tab>" . my-smart-tab))
-  :config
-  (parinfer-strategy-add 'default 'newline-and-indent)
-  :init
-  (progn
-    (setq parinfer-extensions
-          '(defaults       ; should be included.
-             pretty-parens  ; different paren styles for different modes.
-             paredit        ; Introduce some paredit commands.
-             smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-             smart-yank))   ; Yank behavior depend on mode.
-    (add-hook 'clojure-mode-hook #'parinfer-mode)
-    (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'common-lisp-mode-hook #'parinfer-mode)
-    (add-hook 'scheme-mode-hook #'parinfer-mode)
-    (add-hook 'lisp-mode-hook #'parinfer-mode)))
+;; (use-package parinfer
+;;   :ensure t
+;;   :bind
+;;   (:map parinfer-mode-map
+;;         ("C-," . parinfer-toggle-mode)
+;;         ("<tab>" . my-smart-tab))
+;;   :config
+;;   (parinfer-strategy-add 'default 'newline-and-indent)
+;;   :init
+;;   (progn
+;;     (setq parinfer-extensions
+;;           '(defaults       ; should be included.
+;;              pretty-parens  ; different paren styles for different modes.
+;;              paredit        ; Introduce some paredit commands.
+;;              smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+;;              smart-yank))   ; Yank behavior depend on mode.
+;;     (add-hook 'clojure-mode-hook #'parinfer-mode)
+;;     (add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+;;     (add-hook 'common-lisp-mode-hook #'parinfer-mode)
+;;     (add-hook 'scheme-mode-hook #'parinfer-mode)
+;;     (add-hook 'lisp-mode-hook #'parinfer-mode)))
 
-(setq parinfer-auto-switch-indent-mode t)
-
-
+;; (setq parinfer-auto-switch-indent-mode t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'clojure-mode)
+
+(define-clojure-indent
+  (for-all 1))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+(add-hook 'clojure-mode-hook          #'enable-paredit-mode)
+
+(defun paredit-delete-indentation (&optional arg)
+  "Handle joining lines that end in a comment."
+  (interactive "*P")
+  (let (comt)
+    (save-excursion
+      (move-beginning-of-line (if arg 1 0))
+      (when (skip-syntax-forward "^<" (point-at-eol))
+        (setq comt (delete-and-extract-region (point) (point-at-eol)))))
+    (delete-indentation arg)
+    (when comt
+      (save-excursion
+        (move-end-of-line 1)
+        (insert " ")
+        (insert comt)))))
+
+(defvar electrify-return-match
+  "[\]}\)\"]")
+
+(defun electrify-return-if-match (arg)
+  "If the text after the cursor matches `electrify-return-match' then
+  open and indent an empty line between the cursor and the text.  Move the
+  cursor to the new line."
+  (interactive "P")
+  (let ((case-fold-search nil))
+    (if (looking-at electrify-return-match)
+        (save-excursion (newline-and-indent)))
+    (newline arg)
+    (indent-according-to-mode)))
+
+(require 'paredit)
+
+(add-hook 'paredit-mode-hook
+          (lambda ()
+            (global-set-key (kbd "RET") 'electrify-return-if-match)))
+
+(define-key paredit-mode-map (kbd "M-^") 'paredit-delete-indentation)
+(define-key paredit-mode-map (kbd "M-^") 'paredit-delete-indentation)
+
+(define-key paredit-mode-map (kbd "C-<right>") nil)
+(define-key paredit-mode-map (kbd "C-<left>") nil)
+
+
+(define-key paredit-mode-map (kbd "M-<DEL>") 'paredit-kill)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (defun my-forward-word (arg)
+;;   (interactive "p")
+;;   (with-syntax-table (make-syntax-table (syntax-table))
+;;     ;; Always treat newlines as whitespace
+;;     (modify-syntax-entry ?\n "-")
+;;     (modify-syntax-entry ?_  "-")
+;;     (modify-syntax-entry ?-  "-")
+;;     (while (> arg 0)
+;;       (skip-syntax-forward "-")
+;;       (skip-syntax-forward "^-")
+;;       (setq arg (1- arg)))
+;;     (while (< arg 0)
+;;       (skip-syntax-backward "-")
+;;       (skip-syntax-backward "^-")
+;;       (setq arg (1+ arg)))
+;;     t))
+
+;; (defun my-backward-word (arg)
+;;   (interactive "^p")
+;;   (forward-word-whitespace-syntax (- arg)))
+
+(defun my-forward (&optional arg)
+  "Move ARG times to start of a set of the same syntax characters."
+  (interactive "p")
+  (setq arg (or arg 1))
+  (while (and (> arg 0)
+              (not (eobp))
+              (skip-syntax-forward (string (char-syntax (char-after)))))
+    (setq arg (1- arg)))
+  (while (and (< arg 0)
+              (not (bobp))
+              (skip-syntax-backward
+               (string (char-syntax (char-before)))))
+    (setq arg (1+ arg))))
+
+(defun my-backward (&optional arg)
+  "Move ARG times to end of a set of the same syntax characters."
+  (interactive "p")
+  (my-forward (- (or arg 1))))
+
+(global-unset-key (kbd "C-<right>"))
+(global-unset-key (kbd "C-<left>"))
+(global-set-key (kbd "C-<right>") 'my-forward)
+(global-set-key (kbd "C-<left>") 'my-backward)
