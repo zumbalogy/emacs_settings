@@ -46,8 +46,8 @@
 ;;         (right-word)))
 ;;     (mark-word arg allow-extend)))
 
-;; (defun atom-C-d ()
-;;   (interactive)
+;; (defun my-select-word ()
+;;   (interactive "p")
 ;;   (message (number-to-string
 ;;             (cl-count-if 'mc/fake-cursor-p
 ;; 	                   (overlays-in (point-min) (point-max)))))
@@ -62,7 +62,7 @@
 ;; (global-set-key (kbd "<down-mouse-1>") 'cancel-cursor-click)
 
 ;; (global-unset-key (kbd "C-d"))
-;; (global-set-key (kbd "C-d") 'atom-C-d)
+;; (global-set-key (kbd "C-d") 'my-select-word)
 ;; (global-set-key (kbd "C-S-d") 'mc/mark-all-like-this)
 
 ;; (define-key mc/keymap (kbd "<return>") nil)
@@ -339,8 +339,13 @@
 
 (defun my-control-delete (&optional arg)
   (interactive "p")
-  (my-select-backwards)
-  (kill-region))
+  (my-select-forward)
+  (kill-region (region-beginning) (region-end)))
+
+(defun my-control-backspace (&optional arg)
+  (interactive "p")
+  (my-select-backward)
+  (kill-region (region-beginning) (region-end)))
 
 (global-unset-key (kbd "C-<right>"))
 (global-unset-key (kbd "C-<left>"))
@@ -351,4 +356,31 @@
 (global-set-key (kbd "C-S-<right>") 'my-select-forward)
 (global-set-key (kbd "C-S-<left>") 'my-select-backward)
 
-(global-set-key (kbd "C-<DEL>") 'my-control-delete)
+(global-unset-key [C-delete])
+(global-unset-key [C-backspace])
+
+(global-set-key [C-delete] 'my-control-delete)
+(global-set-key [C-backspace] 'my-control-backspace)
+
+;; -------------
+
+(defun mark-whole-word (&optional arg allow-extend)
+  (interactive "P\np")
+  (let ((num (prefix-numeric-value arg)))
+    (unless (eq last-command this-command)
+      (if (natnump num)
+          (skip-syntax-forward "\\s-")
+        (skip-syntax-backward "\\s-")))
+    (unless (or (eq last-command this-command)
+                (if (natnump num)
+                    (looking-at "\\b")
+                  (looking-back "\\b")))
+      (if (natnump num)
+          (left-word)
+        (right-word)))
+    (mark-word arg allow-extend)))
+
+(global-unset-key (kbd "C-d"))
+(define-key paredit-mode-map (kbd "C-d") nil)
+
+(global-set-key (kbd "C-d") 'mark-whole-word)
