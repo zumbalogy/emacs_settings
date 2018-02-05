@@ -263,7 +263,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
 (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
@@ -285,25 +284,7 @@
         (insert " ")
         (insert comt)))))
 
-(defvar electrify-return-match
-  "[\]}\)\"]")
-
-(defun electrify-return-if-match (arg)
-  "If the text after the cursor matches `electrify-return-match' then
-  open and indent an empty line between the cursor and the text.  Move the
-  cursor to the new line."
-  (interactive "P")
-  (let ((case-fold-search nil))
-    (if (looking-at electrify-return-match)
-        (save-excursion (newline-and-indent)))
-    (newline arg)
-    (indent-according-to-mode)))
-
 (require 'paredit)
-
-;; (add-hook 'paredit-mode-hook
-;;           (lambda ()
-;;             (global-set-key (kbd "RET") 'electrify-return-if-match)))
 
 (define-key paredit-mode-map (kbd "M-^") 'paredit-delete-indentation)
 
@@ -356,6 +337,11 @@
       (push-mark beg nil t))
     (setq transient-mark-mode (cons 'only oldval))))
 
+(defun my-control-delete (&optional arg)
+  (interactive "p")
+  (my-select-backwards)
+  (kill-region))
+
 (global-unset-key (kbd "C-<right>"))
 (global-unset-key (kbd "C-<left>"))
 
@@ -364,3 +350,5 @@
 
 (global-set-key (kbd "C-S-<right>") 'my-select-forward)
 (global-set-key (kbd "C-S-<left>") 'my-select-backward)
+
+(global-set-key (kbd "C-<DEL>") 'my-control-delete)
