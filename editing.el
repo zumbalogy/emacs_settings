@@ -314,27 +314,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (defun my-forward-word (arg)
-;;   (interactive "p")
-;;   (with-syntax-table (make-syntax-table (syntax-table))
-;;     ;; Always treat newlines as whitespace
-;;     (modify-syntax-entry ?\n "-")
-;;     (modify-syntax-entry ?_  "-")
-;;     (modify-syntax-entry ?-  "-")
-;;     (while (> arg 0)
-;;       (skip-syntax-forward "-")
-;;       (skip-syntax-forward "^-")
-;;       (setq arg (1- arg)))
-;;     (while (< arg 0)
-;;       (skip-syntax-backward "-")
-;;       (skip-syntax-backward "^-")
-;;       (setq arg (1+ arg)))
-;;     t))
-
-;; (defun my-backward-word (arg)
-;;   (interactive "^p")
-;;   (forward-word-whitespace-syntax (- arg)))
-
 (defun my-forward (&optional arg)
   "Move ARG times to start of a set of the same syntax characters."
   (interactive "p")
@@ -350,7 +329,6 @@
     (setq arg (1+ arg))))
 
 (defun my-backward (&optional arg)
-  "Move ARG times to end of a set of the same syntax characters."
   (interactive "p")
   (my-forward (- (or arg 1))))
 
@@ -360,11 +338,20 @@
         (backwards (and mark-active (> (mark) (point))))
         (beg (and mark-active (mark-marker))))
     (unless beg
-      nil
       (setq beg (point-marker)))
-    (if backwards
-        (end-of-line (- 1 arg))
-      (my-forward))
+    (my-forward)
+    (unless mark-active
+      (push-mark beg nil t))
+    (setq transient-mark-mode (cons 'only oldval))))
+
+(defun my-select-backward (&optional arg)
+  (interactive "p")
+  (let ((oldval (or (cdr-safe transient-mark-mode) transient-mark-mode))
+        (backwards (and mark-active (> (mark) (point))))
+        (beg (and mark-active (mark-marker))))
+    (unless beg
+      (setq beg (point-marker)))
+    (my-backward)
     (unless mark-active
       (push-mark beg nil t))
     (setq transient-mark-mode (cons 'only oldval))))
@@ -376,4 +363,4 @@
 (global-set-key (kbd "C-<left>") 'my-backward)
 
 (global-set-key (kbd "C-S-<right>") 'my-select-forward)
-(global-set-key (kbd "C-S-<left>") 'my-mark-current-line)
+(global-set-key (kbd "C-S-<left>") 'my-select-backward)
