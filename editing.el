@@ -301,16 +301,14 @@
 
 (require 'paredit)
 
-(add-hook 'paredit-mode-hook
-          (lambda ()
-            (global-set-key (kbd "RET") 'electrify-return-if-match)))
+;; (add-hook 'paredit-mode-hook
+;;           (lambda ()
+;;             (global-set-key (kbd "RET") 'electrify-return-if-match)))
 
-(define-key paredit-mode-map (kbd "M-^") 'paredit-delete-indentation)
 (define-key paredit-mode-map (kbd "M-^") 'paredit-delete-indentation)
 
 (define-key paredit-mode-map (kbd "C-<right>") nil)
 (define-key paredit-mode-map (kbd "C-<left>") nil)
-
 
 (define-key paredit-mode-map (kbd "M-<DEL>") 'paredit-kill)
 
@@ -356,7 +354,26 @@
   (interactive "p")
   (my-forward (- (or arg 1))))
 
+(defun my-select-forward (&optional arg)
+  (interactive "p")
+  (let ((oldval (or (cdr-safe transient-mark-mode) transient-mark-mode))
+        (backwards (and mark-active (> (mark) (point))))
+        (beg (and mark-active (mark-marker))))
+    (unless beg
+      nil
+      (setq beg (point-marker)))
+    (if backwards
+        (end-of-line (- 1 arg))
+      (my-forward))
+    (unless mark-active
+      (push-mark beg nil t))
+    (setq transient-mark-mode (cons 'only oldval))))
+
 (global-unset-key (kbd "C-<right>"))
 (global-unset-key (kbd "C-<left>"))
+
 (global-set-key (kbd "C-<right>") 'my-forward)
 (global-set-key (kbd "C-<left>") 'my-backward)
+
+(global-set-key (kbd "C-S-<right>") 'my-select-forward)
+(global-set-key (kbd "C-S-<left>") 'my-mark-current-line)
