@@ -362,7 +362,28 @@
 (global-set-key [C-delete] 'my-control-delete)
 (global-set-key [C-backspace] 'my-control-backspace)
 
-;; -------------
+(defun my-backspace (&optional arg)
+  (interactive "p")
+  (if (region-active-p)
+      (kill-region (region-beginning) (region-end))
+    (kill-backward-chars (or arg 1))))
+
+(defun my-delete (&optional arg)
+  (interactive "p")
+  (if (region-active-p)
+      (kill-region (region-beginning) (region-end))
+    (kill-forward-chars (or arg 1))))
+
+(global-unset-key [delete])
+(global-unset-key [backspace])
+
+(global-set-key [delete] 'my-delete)
+(global-set-key [backspace] 'my-backspace)
+
+(define-key paredit-mode-map [delete] nil)
+(define-key paredit-mode-map [delete] 'my-delete)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun mark-whole-word (&optional arg allow-extend)
   (interactive "P\np")
