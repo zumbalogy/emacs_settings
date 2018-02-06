@@ -129,30 +129,25 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun duplicate-line-or-region (&optional n)
-  "Duplicate current line, or region if active.
-    With argument N, make N copies.
-    With negative N, comment out original line and use the absolute value."
+(defun duplicate-region (&optional n)
   (interactive "*p")
   (let ((use-region (use-region-p)))
     (save-excursion
-      (let ((text (if use-region        ;Get region if active, otherwise line
+      (let ((text (if use-region
                       (buffer-substring (region-beginning) (region-end))
                     (prog1 (thing-at-point 'line)
                       (end-of-line)
-                      (if (< 0 (forward-line 1)) ;Goto start of next or new line
+                      (if (< 0 (forward-line 1))
                           (newline))))))
         (dotimes (i (abs (or n 1)))
           (insert text))))
-    (if use-region nil               ;Only if working with a line, not a region
-      (let ((pos (- (point) (line-beginning-position)))) ;Save column
-        (if (> 0 n)                     ;Comment out original with negative arg
-            (comment-region (line-beginning-position) (line-end-position)))
+    (if use-region nil
+      (let ((pos (- (point) (line-beginning-position)))) ; Save column
         (forward-line 1)
         (forward-char pos)))))
 
 (global-unset-key (kbd "C-S-d"))
-(global-set-key (kbd "C-S-d") 'duplicate-line-or-region)
+(global-set-key (kbd "C-S-d") 'duplicate-region)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -176,6 +171,12 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defmacro save-column (&rest body)
+  `(let ((column (current-column)))
+     (unwind-protect
+         (progn ,@body)
+       (move-to-column column))))
+
 (defun move-text-internal (arg)
   (cond
    ((and mark-active transient-mark-mode)
@@ -198,14 +199,14 @@
       (forward-line -1)))))
 
 (defun move-text-down (arg)
-  "Move region (transient-mark-mode active) or current line arg lines down."
   (interactive "*p")
-  (move-text-internal arg))
+  (save-column
+   (move-text-internal arg)))
 
 (defun move-text-up (arg)
-  "Move region (transient-mark-mode active) or current line arg lines up."
   (interactive "*p")
-  (move-text-internal (- arg)))
+  (save-column
+   (move-text-internal (- arg))))
 
 (global-set-key (kbd "C-S-<up>") 'move-text-up)
 (global-set-key (kbd "C-S-<down>") 'move-text-down)
@@ -405,3 +406,21 @@
 (define-key paredit-mode-map (kbd "C-d") nil)
 
 (global-set-key (kbd "C-d") 'mark-whole-word)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(define-key paredit-mode-map (kbd "C-9") nil)
+(define-key paredit-mode-map (kbd "C-0") nil)
+
+(define-key paredit-mode-map (kbd "C-9") 'paredit-backward-slurp-sexp)
+(define-key paredit-mode-map (kbd "C-0") 'paredit-forward-slurp-sexp)
+
+(define-key paredit-mode-map (kbd "C-)") nil)
+(define-key paredit-mode-map (kbd "C-(") nil)
+
+(define-key paredit-mode-map (kbd "C-)") 'paredit-backward-barf-sexp)
+(define-key paredit-mode-map (kbd "C-(") 'paredit-forward-barf-sexp)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
