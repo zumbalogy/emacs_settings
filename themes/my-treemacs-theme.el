@@ -4,7 +4,7 @@
 (custom-theme-set-faces
  'my-treemacs
 
- '(default ((t (:background "#202025" :foreground "#bbc2cf" :height 132))))
+ '(default ((t (:background "#202025" :foreground "#bbc2cf" :height 124))))
  )
 
 ;; autoload

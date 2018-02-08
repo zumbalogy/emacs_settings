@@ -1,6 +1,9 @@
 TODO
 
 
+
+;; make control-t be able to take a line number
+
 ;; have the modeline know if the buffer is linum more or not and ajust accordingly.
 ;;   alt, have all buffers have line numbers (though blank files would still make
 ;;   it funny

@@ -18,10 +18,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("d56c707f683d5904415886a08f09c6b4724a3601477a7dbec1a15bc722935727" "" default)))
+    ("f93b82e0ad0ea189fd981581fa66891aa78bd581a8a17931b4c644da3b18d7a6" "3273aa1448e0bfe6bf3d500f95e49f645743616a3116e88dfbdf982159f48c44" "64333355ad27d35db1ae47a9843a6b75f24e6192d74c97ae479286f9e445270e" "d56c707f683d5904415886a08f09c6b4724a3601477a7dbec1a15bc722935727" "" default)))
  '(package-selected-packages
    (quote
-    (paredit parinfer haskell-emacs haml-mode color-theme-modern load-theme-buffer-local coffee-mode delight desktop+ fiplr undo-tree use-package treemacs-projectile tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters neotree multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking cider atom-one-dark-theme))))
+    (all-the-icons-dired treemacs-projectile treemacs cider auto-package-update cljdoc paredit parinfer haskell-emacs haml-mode color-theme-modern load-theme-buffer-local coffee-mode delight desktop+ fiplr undo-tree use-package tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking atom-one-dark-theme))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -50,6 +50,7 @@
   (load "~/emacs/mode_line_tabs.el")
   (load "~/emacs/mode_line.el")
   (load "~/emacs/treemacs.el")
+  ;; (load "~/emacs/dired-sidebar.el")
   ;; (load "~/emacs/neotree.el")
   ;; (load "~/emacs/mode_line_collapse.el")
   )
@@ -190,8 +191,7 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
         (switch-to-buffer file)
       (find-file (concat root-dir file)))))
 
-(defun fiplr-find-file-in-directory
-    (path ignored-globs &optional find-file-function)
+(defun fiplr-find-file-in-directory (path ignored-globs &optional find-file-function)
   (let* ((root-dir (file-name-as-directory path))
          (index (fiplr-get-index 'files root-dir ignored-globs))
          (file (minibuffer-with-setup-hook
@@ -306,3 +306,11 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'cljdoc)
+(require 'cider)
+(add-hook 'clojure-mode-hook 'cider-mode)
+(add-hook 'cider-interaction-mode-hook 'cider-turn-on-eldoc-mode)

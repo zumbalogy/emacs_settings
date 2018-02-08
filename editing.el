@@ -422,5 +422,9 @@
 (define-key paredit-mode-map (kbd "C-)") 'paredit-backward-barf-sexp)
 (define-key paredit-mode-map (kbd "C-(") 'paredit-forward-barf-sexp)
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+;; (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

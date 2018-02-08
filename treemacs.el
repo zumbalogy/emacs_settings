@@ -5,6 +5,8 @@
   :ensure t
   :defer t
   :config (progn
+            (treemacs-follow-mode t)
+            (treemacs-filewatch-mode t)
             (setq treemacs-follow-after-init          t
                   treemacs-width                      28
                   treemacs-indentation                1
@@ -15,38 +17,30 @@
                   treemacs-sorting                    'alphabetic-desc
                   treemacs-show-hidden-files          t
                   treemacs-no-images                  t
+                  treemacs-no-png-images              t
                   treemacs-never-persist              nil
                   treemacs-is-never-other-window      t
                   treemacs-goto-tag-strategy          'refetch-index
-                  )
-            (treemacs-follow-mode t)
-            (treemacs-filewatch-mode t)))
+                  treemacs-icon-open-png (propertize "- " 'face 'treemacs-directory-face)
+                  treemacs-icon-closed-png (propertize "+ " 'face 'treemacs-directory-face)
+                  )))
 
 (defun treemacs-header (current-root)
   (format " %s " (file-name-nondirectory current-root)))
 
 (setq treemacs-header-function #'treemacs-header)
 
-(setq treemacs-icon-fallback (propertize "  " 'face 'treemacs-term-node-face))
-(setq treemacs-icon-closed (propertize "+ " 'face 'treemacs-term-node-face))
-(setq treemacs-icon-open (propertize "- " 'face 'treemacs-term-node-face))
-(setq treemacs-icons-hash (make-hash-table))
-
-(add-hook 'treemacs-mode-hook '(lambda () (linum-mode -1)))
-
 (require 'color-theme-buffer-local)
-(add-to-list 'custom-theme-load-path
-             (file-name-as-directory "~/emacs/themes"))
-(load-theme 'my-treemacs t t)
+(add-to-list 'custom-theme-load-path "~/emacs/themes")
 
-(with-eval-after-load "treemacs"
-  (treemacs-restore)
-  (load-theme-buffer-local 'my-treemacs (get-buffer "*Treemacs*"))
-  (define-key treemacs-mode-map [mouse-1] 'treemacs-visit-node-default-action))
+(add-hook 'treemacs-mode-hook
+          (lambda ()
+            (linum-mode -1)
+            (load-theme-buffer-local 'my-treemacs (get-buffer " *Treemacs-Framebuffer-1*"))
+            (define-key treemacs-mode-map [mouse-1] 'treemacs-visit-node-default-action)))
 
 ;; TODO: have it follow version control of a buffer
-;; TODO: hide "Treemacs" text from the modeline (maybe show git branch)
-;; TODO: would be nice to color the tree background
+;; TODO: would be nice to color the background properly
 ;; (set-face-attribute 'hl-line nil :foreground "black" :background "yellow")
 
 (defun git-on-branch ()

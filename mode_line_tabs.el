@@ -11,6 +11,7 @@
 (setq tabbar-buffer-groups-function 'my-tabbar-buffer-groups)
 
 (setq *tabbar-ignore-buffers* '("*Treemacs*"
+                                " *Treemacs-Framebuffer-1*"
                                 "*Messages*"
                                 "*Shell Command Output*"
                                 "*scratch*"
