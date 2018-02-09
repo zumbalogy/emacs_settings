@@ -71,15 +71,14 @@ Must be bound to a mouse click, or EVENT will not be supplied."
      :on-file-node-closed (treemacs-visit-node-no-split btn)
      :on-file-node-open   (treemacs-visit-node-no-split btn)
      :no-error            t)
-    (treemacs--evade-image)))
+    (treemacs--evade-image)
+    (other-window 1)))
 ;; TODO: get this to move focus to new buffer
 
 ;; also, look into dired-sidebar, as its faster
 ;; and treemacs is now super slow.
 ;; just have to figure out nice sorting
 ;; for that one.
-
-
 
 (require 'color-theme-buffer-local)
 (add-to-list 'custom-theme-load-path "~/emacs/themes")
