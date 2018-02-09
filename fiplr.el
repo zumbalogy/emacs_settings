@@ -1,5 +1,3 @@
-(require 'fiplr)
-(require 'projectile)
 (require 'ido)
 (require 'cl)
 
@@ -21,13 +19,89 @@
 (add-hook 'kill-buffer-hook 'track-file)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; https://github.com/grizzl/fiplr/blob/master/fiplr.el
+
+(defun fiplr-list-files-shell-command (type path ignored-globs)
+  "Builds the `find' command to locate all project files & directories.
+PATH is the base directory to recurse from.
+IGNORED-GLOBS is an alist with keys 'DIRECTORIES and 'FILES."
+  (let* ((type-abbrev
+          (lambda (assoc-type)
+            (cl-case assoc-type
+              ('directories "d")
+              ('files "f"))))
+         (name-matcher
+          (lambda (glob)
+            (mapconcat 'identity
+                       `("-name" ,(shell-quote-argument glob))
+                       " ")))
+         (grouped-name-matchers
+          (lambda (type)
+            (mapconcat 'identity
+                       `(,(shell-quote-argument "(")
+                         ,(mapconcat (lambda (v) (funcall name-matcher v))
+                                     (cadr (assoc type ignored-globs))
+                                     " -o ")
+                         ,(shell-quote-argument ")"))
+                       " ")))
+         (matcher
+          (lambda (assoc-type)
+            (mapconcat 'identity
+                       `(,(shell-quote-argument "(")
+                         "-type"
+                         ,(funcall type-abbrev assoc-type)
+                         ,(funcall grouped-name-matchers assoc-type)
+                         ,(shell-quote-argument ")"))
+                       " "))))
+    (mapconcat 'identity
+               `("find"
+                 "-L"
+                 ,(shell-quote-argument (directory-file-name path))
+                 ,(funcall matcher 'directories)
+                 "-prune"
+                 "-o"
+                 "-not"
+                 ,(funcall matcher 'files)
+                 "-type"
+                 ,(funcall type-abbrev type)
+                 "-print")
+               " ")))
+
+(defun fiplr-list-files (type path ignored-globs)
+  "Expands to a flat list of files/directories found under PATH.
+The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
+  (let* ((prefix (file-name-as-directory (file-truename path)))
+         (prefix-length (length prefix))
+         (list-string
+          (shell-command-to-string (fiplr-list-files-shell-command
+                                    type
+                                    prefix
+                                    ignored-globs))))
+    (reverse (cl-reduce (lambda (acc file)
+                          (if (> (length file) prefix-length)
+                              (cons (substring file prefix-length) acc)
+                            acc))
+                        (split-string list-string "[\r\n]+" t)
+                        :initial-value '()))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun root-dir ()
+  (let ((backend (vc-responsible-backend default-directory)))
+    (if backend
+        (ignore-errors
+          (expand-file-name
+           (vc-call-backend backend 'root default-directory)))
+      default-directory)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq fiplr-ignored-globs
       '((directories (".git" ".svn" ".hg" ".bzr" "target"))
         (files (".#*" "*~" "*.so" "*.o" "*.jpg" "*.png" "*.gif" "*.pdf" "*.gz" "*.zip" "*.elc"))))
 
 (defun list-files ()
-  (fiplr-list-files 'files (projectile-project-root) fiplr-ignored-globs))
+  (fiplr-list-files 'files (root-dir) fiplr-ignored-globs))
 
 (defun list-buffers ()
   (mapcar (function buffer-name) (buffer-list)))
@@ -35,11 +109,15 @@
 (defun list-all ()
   (append recentf-list (list-buffers) (list-files)))
 
+(defun clean-fname (name)
+  (let* ((a (string-remove-prefix (root-dir) name))
+         (b (string-remove-prefix "home" a))
+         (c (string-remove-prefix "" b)))
+    c))
+
 (defun list-all-clean ()
-  (let* ((root (projectile-project-root))
-         (clean-name (lambda (x) (string-remove-prefix root x)))
-         (empty-filter (lambda (x) (not (string= x ""))))
-         (short-names (mapcar clean-name (list-all)))
+  (let* ((empty-filter (lambda (x) (not (string= x ""))))
+         (short-names (mapcar 'clean-fname (list-all)))
          (non-empty-names (seq-filter empty-filter short-names)))
     (delete-dups non-empty-names)))
 
