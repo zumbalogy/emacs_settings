@@ -1,5 +1,7 @@
 (require 'projectile)
 
+;; TODO: store all those undo-tree stuff and  other crap somewhere  else
+
 (defun git-on-branch ()
   (let ((default-directory (projectile-project-root))
         (branch (shell-command-to-string "git branch | grep '*'")))
@@ -8,7 +10,7 @@
       "")))
 
 (defvar sidebar-face
-  '(:background "#202025" :forground "#bbc2cf" :height 25))
+  '(:background "#202025" :foreground "#bbc2cf" :height 124))
 
 (use-package dired-sidebar
   ;; :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
@@ -33,6 +35,4 @@
 (add-hook 'dired-sidebar-mode-hook
           (lambda ()
             (linum-mode -1)
-            (setq dired-sidebar-face sidebar-face)
-            (face-remap-add-relative 'dired-sidebar-face 'sidebar-face)
             ))

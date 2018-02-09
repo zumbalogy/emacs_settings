@@ -62,7 +62,7 @@
           (lambda ()
             (make-local-variable 'face-remapping-alist)
             (add-to-list 'face-remapping-alist
-                         '(default (:forground "#bbc2cf")))))
+                         '(default (:foreground "#bbc2cf")))))
 
 ;; TODO: if set background, it works far all this except when buffers are changed
 ;; and there is just blank space there, and running the echo area code
