@@ -1,3 +1,15 @@
+(require 'projectile)
+
+(defun git-on-branch ()
+  (let ((default-directory (projectile-project-root))
+        (branch (shell-command-to-string "git branch | grep '*'")))
+    (if (< 11 (length branch))
+        (concat " " (substring branch 7 -4))
+      "")))
+
+(defvar sidebar-face
+  '(:background "#202025" :forground "#bbc2cf" :height 25))
+
 (use-package dired-sidebar
   ;; :bind (("C-x C-n" . dired-sidebar-toggle-sidebar))
   :ensure t
@@ -9,20 +21,18 @@
         dired-sidebar-use-custom-font t
         dired-sidebar-width 24
         dired-sidebar-use-evil-integration nil
+        dired-sidebar-mode-line-format (git-on-branch)
+        dired-sidebar-face sidebar-face
+
         ;; dired-sidebar-display-alist '(1 2 3 4)
 
-        ;; dired-sidebar-face '(:background
-        ;;                      "#202025"
-        ;;                      :forground
-        ;;                      "#bbc2cf"
-        ;;                      :height
-        ;;                      88
-        ;;                      )
-
-        ;; dired-sidebar-face '(:family "Arial" :height 140)
         ))
 
-;; (use-package all-the-icons-dired
-;;   ;; M-x all-the-icons-install-fonts
-;;   :ensure t
-;;   :commands (all-the-icons-dired-mode))
+ ;; '(default ((t (:background "#202025" :foreground "#bbc2cf" :height 124))))
+
+(add-hook 'dired-sidebar-mode-hook
+          (lambda ()
+            (linum-mode -1)
+            (setq dired-sidebar-face sidebar-face)
+            (face-remap-add-relative 'dired-sidebar-face 'sidebar-face)
+            ))

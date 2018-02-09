@@ -1,5 +1,6 @@
 (setq load-path (cons "~/emacs" load-path))
 
+
 ;; ln -s emacs/.emacs .emacs
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -21,7 +22,7 @@
     ("f93b82e0ad0ea189fd981581fa66891aa78bd581a8a17931b4c644da3b18d7a6" "3273aa1448e0bfe6bf3d500f95e49f645743616a3116e88dfbdf982159f48c44" "64333355ad27d35db1ae47a9843a6b75f24e6192d74c97ae479286f9e445270e" "d56c707f683d5904415886a08f09c6b4724a3601477a7dbec1a15bc722935727" "" default)))
  '(package-selected-packages
    (quote
-    (all-the-icons-dired treemacs-projectile treemacs cider auto-package-update cljdoc paredit parinfer haskell-emacs haml-mode color-theme-modern load-theme-buffer-local coffee-mode delight desktop+ fiplr undo-tree use-package tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking atom-one-dark-theme))))
+    (dired-sidebar all-the-icons-dired treemacs-projectile treemacs cider auto-package-update cljdoc paredit parinfer haskell-emacs haml-mode color-theme-modern load-theme-buffer-local coffee-mode delight desktop+ fiplr undo-tree use-package tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking atom-one-dark-theme))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -46,6 +47,7 @@
 ;;  (byte-recompile-directory (expand-file-name "~/emacs") 0)
   (load "~/emacs/theme.el")
   (load "~/emacs/editing.el")
+  (load "~/emacs/fiplr.el")
   ;; (load "~/emacs/tabs.el")
   (load "~/emacs/mode_line_tabs.el")
   (load "~/emacs/mode_line.el")
@@ -88,7 +90,6 @@
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -155,67 +156,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: maybe make it so it ignores git ignored things by default
-;; TODO: maybe set it to not move the file when the cursor is beneath the fold of where
-;;     the selector minibuffer thing is coming up
-;; TODO: look into problems with duplicate buffer/file names
-
-(require 'fiplr)
-
-;; TODO: take treemacs out of buffers returned
-;; TODO: maybe have it sort by most recently used by default or something
-
-(require 'cl)
-;; TODO: remove CL dependancy
-(defun fiplr-list-files (type path ignored-globs)
-  "Expands to a flat list of files/directories found under PATH.
-The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
-  (let* ((prefix (file-name-as-directory (file-truename path)))
-         (prefix-length (length prefix))
-         (buffers (mapcar (function buffer-name) (buffer-list)))
-         (list-string (shell-command-to-string (fiplr-list-files-shell-command
-                                                type
-                                                prefix
-                                                ignored-globs)))
-         (files (reverse (cl-reduce (lambda (acc file)
-                                      (if (> (length file) prefix-length)
-                                          (cons (substring file prefix-length) acc)
-                                        acc))
-                                    (split-string list-string "[\r\n]+" t)
-                                    :initial-value '()))))
-    (delete-dups (append buffers files))))
-
-(defun my-flipr-find-file (root-dir file)
-  (let ((buffers (mapcar (function buffer-name) (buffer-list))))
-    (if (member file buffers)
-        (switch-to-buffer file)
-      (find-file (concat root-dir file)))))
-
-(defun fiplr-find-file-in-directory (path ignored-globs &optional find-file-function)
-  (let* ((root-dir (file-name-as-directory path))
-         (index (fiplr-get-index 'files root-dir ignored-globs))
-         (file (minibuffer-with-setup-hook
-                   (lambda ()
-                     (fiplr-mode 1))
-                 (grizzl-completing-read (format "Find in project (%s)" root-dir)
-                                         index))))
-    (if (eq this-command 'fiplr-reload-list) ; exited for reload
-        (fiplr-reload-list)
-      (my-flipr-find-file root-dir file))))
-
-
-(setq fiplr-ignored-globs
-      '((directories (".git" ".svn" ".hg" ".bzr" "target"))
-        (files (".#*" "*~" "*.so" "*.o" "*.jpg" "*.png" "*.gif" "*.pdf" "*.gz" "*.zip" "*.elc"))))
-
-(global-unset-key [(control t)])
-(global-set-key [(control t)] 'fiplr-find-file)
-
-;; TODO: have this also look at current open buffers
-;; TODO: be able to write line number to jump to
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; scroll one line at a time (less "jumpy" than defaults)
 
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
@@ -242,7 +182,7 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
         (ido-setup-hook (cons 'smex-prepare-ido-bindings ido-setup-hook))
         (ido-enable-prefix nil)
         (ido-enable-flex-matching smex-flex-matching)
-        (ido-max-prospects 6)
+        (ido-max-prospects 5)
         (minibuffer-completion-table choices))
     (ido-completing-read (smex-prompt-with-prefix-arg) choices nil nil
                          initial-input 'extended-command-history (car choices))))
@@ -255,15 +195,6 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 ;; (global-set-key [f13] 'execute-extended-command)
 (global-set-key [f13] 'smex)
 ;; TODO: maybe have f13 (caps lock) cancel smex if smex is already up
-
-
-;; (global-unset-key (kbd "M-x"))
-;; (global-set-key (kbd "M-x") 'smex)
-;; (global-unset-key (kbd "M-X"))
-;; (global-set-key (kbd "M-X") 'smex-major-mode-commands)
-;; This is your old M-x.
-
-;; this is ugly/lots of visual noise, but ok.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

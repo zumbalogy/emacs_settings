@@ -8,8 +8,9 @@
             (treemacs-follow-mode t)
             (treemacs-filewatch-mode t)
             (setq treemacs-follow-after-init          t
+                  treemacs-file-event-delay	      300 ;ms
                   treemacs-width                      28
-                  treemacs-indentation                1
+                  treemacs-indentation                2
                   treemacs-git-integration            t
                   treemacs-collapse-dirs              0
                   treemacs-silent-refresh             t
@@ -54,17 +55,13 @@
 ;; TODO: ignore certain file types (like *.elc)
 
 (defun my-treemacs-click-action (event)
-  "Move focus to the clicked line.
-Must be bound to a mouse click, or EVENT will not be supplied."
   (interactive "e")
   (when (eq 'mouse-1 (elt event 0))
     (unless (eq major-mode 'treemacs-mode)
-      ;; no when-let - the window must exist or this function would not be called
       (select-window (treemacs--is-visible?)))
     (goto-char (posn-point (cadr event)))
     (when (region-active-p)
       (keyboard-quit))
-    ;; 7th element is the clicked image
     (treemacs-do-for-button-state
      :on-dir-node-closed  (treemacs--expand-dir-node btn)
      :on-dir-node-open    (treemacs--collapse-dir-node btn)
@@ -88,4 +85,5 @@ Must be bound to a mouse click, or EVENT will not be supplied."
             (linum-mode -1)
             (load-theme-buffer-local 'my-treemacs (get-buffer " *Treemacs-Framebuffer-1*"))
             (define-key treemacs-mode-map [mouse-1] 'my-treemacs-click-action)
+            (treemacs-git-mode 'simple)
             ))
