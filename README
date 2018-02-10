@@ -1,7 +1,5 @@
 TODO
 
-
-
 ;; save emacs desktops on a per project bases maybe
 
 ;; have the modeline know if the buffer is linum mode or not and ajust accordingly.
