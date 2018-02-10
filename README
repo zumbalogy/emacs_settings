@@ -2,43 +2,31 @@ TODO
 
 
 
-;; make control-t be able to take a line number
-
 ;; save emacs desktops on a per project bases maybe
 
-;; have the modeline know if the buffer is linum more or not and ajust accordingly.
+;; have the modeline know if the buffer is linum mode or not and ajust accordingly.
 ;;   alt, have all buffers have line numbers (though blank files would still make
 ;;   it funny
-;; treemacs should retain color on toggle
 ;; get a font with slashed zeros
-;; Make sure the emacs ~ and the .~undo-tree~ files get cleaned up.
-;;      this might be solved if i do all my file managment via emacs
 ;; dont have mode line print if im doing a search though text
-;; autosave before quit
 ;; select all
-;; control-d (or such) to select current word/thing and
-;;     control-d while something is selected to also select next occcurence, w/ mutli cursor
 ;; multiple cursors
 ;; https://www.emacswiki.org/emacs/multiple-line-edit.el
 ;; cider
 ;; autocomplete/tab-complete in editor?
-;; better scrolling (smooth scrolling didnt work)
-;; repl/terminal/etc in emacs
-;; scroll up for history (in repl, in echo area maybe, etc)
+;; better scrolling
+;; better (highlighted) repl/terminal/etc in emacs
+;; scroll up for history in repl
 ;; send to terminal?
 ;; learn org mode
-;; emacs git integration (git porcelin?)
+;; emacs git integration (magit?)
 ;;   atom shows what lines are uncommited in git, which is maybe useful. maybe i could toggle to show dif or something
 ;; better git repo support for emacs configs
 ;;   (.emacs should just link to ~/emacs/ and ~/emacs/.emacs and ~/emacs/ should be git repo, im guessing)
 ;; learn/get better find and find/replace (find in folder/repo/etc) (dired? helm?)
 ;; better toggle though buffers and frames. (but mostly frames)
-;; tweak timeouts on echo area messages and all that
 ;; filter some messages (or tweak them) that go in echo area
 ;;    (https://www.emacswiki.org/emacs/EchoArea)
-;; https://github.com/Fuco1/smartparens
-;; paredit
-;; line numbers
 ;; git gutter working
 ;; https://github.com/Malabarba/aggressive-indent-mode
 ;; https://github.com/ogdenwebb/emacs-kaolin-themes/wiki/Kaolin-dark-theme
@@ -57,12 +45,7 @@ TODO
 ;; https://github.com/bburns/clipmon
 ;; https://github.com/clojure-emacs/squiggly-clojure
 
-
-;; TODO: control t not finding new files
-
-;; get undo tree mode out of modeline, not needed.
-;; the git branch thing to not say "git"
-;; and maybe have file pathname be longer, as to lessen need for treemacs
+;; maybe have file pathname be longer, as to lessen need for treemacs
 
 ;; TODO: get emacsclient and emacs --daemon working with loaded the config files in a smart way
 ;; and restoring the session. cuts start up time in less than half, which is nice.
@@ -72,13 +55,5 @@ these are the current packages i have downloaded:
 (icicles atom-one-dark-theme cider clojure-mode-extra-font-locking clojure-mode color-theme-buffer-local color-theme doom-themes all-the-icons el-get font-lock+ memoize minibuffer-line multiple-cursors neotree queue rainbow-delimiters seq smex smooth-scroll smooth-scrolling spinner symon tabbar treemacs-projectile treemacs hydra pfuture ace-window avy f s dash projectile pkg-info epl undo-tree use-package diminish bind-key)
 
 
-TODO: maybe control-t (find file thing) should just put me in home/ (like control-x f)
-if its not in a git repo. (or should have a list of previously used files or something)
-
-
 TODO: https://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html
  would maybe be better than redefining some functions that i redefine
-
-TODO: make control enter go onto next line with indentation
-
-TODO: make control T completion minibuffer prettier
