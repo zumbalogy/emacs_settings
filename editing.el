@@ -1,16 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(cua-mode t)
-(setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
-(transient-mark-mode 1) ;; No region when it is not highlighted
-(setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(delete-selection-mode 1)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; (require 'multiple-cursors)
 ;; (require 'mouse)
@@ -69,30 +57,7 @@
 
 ;; ;; press C-' to hide all lines without a cursor, press C-' again to unhide
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defvar undo-tree-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map [remap undo] 'undo-tree-undo)
-    (define-key map [remap undo-only] 'undo-tree-undo)
-    (define-key map [remap redo] 'undo-tree-redo)
-    (define-key map (kbd "M-_") 'undo-tree-redo)
-    (define-key map (kbd "\C-x u") 'undo-tree-visualize)
-    (define-key map (kbd "\C-x u") 'undo-tree-visualize)
-    (define-key map (kbd "C-x r u") 'undo-tree-save-state-to-register)
-    (define-key map (kbd "C-x r U") 'undo-tree-restore-state-from-register)
-    map))
-
-(global-undo-tree-mode)
-(setq undo-tree-auto-save-history t)
-
-(global-unset-key (kbd "C-z"))
-(global-set-key (kbd "C-z") 'undo-tree-undo)
-
-(global-unset-key (kbd "C-y"))
-(global-set-key (kbd "C-y") 'undo-tree-redo)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; TODO: This does not write comment on empty line, and also does not
 ;; keep things highlighted
@@ -213,6 +178,12 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(cua-mode t)
+(setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
+(transient-mark-mode 1) ;; No region when it is not highlighted
+(setq cua-keep-region-after-copy t) ;; Standard Windows behaviour
+(require 'simpleclip)
+
 (defun nonbreaking-return (&optional n)
   (interactive "*p")
   (let ((use-region (use-region-p)))
@@ -223,6 +194,19 @@
 (with-eval-after-load 'cua-base
   (define-key cua-global-keymap [C-return] nil)
   (global-set-key [(C-return)] 'nonbreaking-return))
+
+(delete-selection-mode 1)
+
+(setq save-interprogram-paste-before-kill t)
+(setq x-select-enable-clipboard nil)
+
+(defun cua-paste (&optional _)
+  (interactive "p")
+  (simpleclip-paste))
+
+(defun cua-copy-region (&optional _)
+  (interactive "p")
+  (simpleclip-copy (region-beginning) (region-end)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

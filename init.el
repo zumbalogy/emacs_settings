@@ -22,7 +22,7 @@
     ("f93b82e0ad0ea189fd981581fa66891aa78bd581a8a17931b4c644da3b18d7a6" "3273aa1448e0bfe6bf3d500f95e49f645743616a3116e88dfbdf982159f48c44" "64333355ad27d35db1ae47a9843a6b75f24e6192d74c97ae479286f9e445270e" "d56c707f683d5904415886a08f09c6b4724a3601477a7dbec1a15bc722935727" "" default)))
  '(package-selected-packages
    (quote
-    (dired-sidebar all-the-icons-dired treemacs-projectile treemacs cider auto-package-update cljdoc paredit parinfer haskell-emacs haml-mode color-theme-modern load-theme-buffer-local coffee-mode delight desktop+ fiplr undo-tree use-package tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking atom-one-dark-theme))))
+    (simpleclip dired-sidebar all-the-icons-dired treemacs-projectile treemacs cider auto-package-update cljdoc paredit parinfer haskell-emacs haml-mode color-theme-modern load-theme-buffer-local coffee-mode delight desktop+ fiplr undo-tree use-package tabbar symon smooth-scrolling smooth-scroll smex rainbow-delimiters multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking atom-one-dark-theme))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -80,6 +80,40 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq
+   backup-by-copying t      ; don't clobber symlinks
+   backup-directory-alist
+    '(("." . "~/.saves"))
+   delete-old-versions t
+   kept-new-versions 6
+   kept-old-versions 2
+   version-control t
+   undo-tree-auto-save-history t
+   undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+
+(defvar undo-tree-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map [remap redo] 'undo-tree-redo)
+    (define-key map [remap undo] 'undo-tree-undo)
+    (define-key map [remap undo-only] 'undo-tree-undo)
+    (define-key map (kbd "M-_") 'undo-tree-redo)
+    (define-key map (kbd "\C-x u") 'undo-tree-visualize)
+    (define-key map (kbd "\C-x u") 'undo-tree-visualize)
+    (define-key map (kbd "C-x r u") 'undo-tree-save-state-to-register)
+    (define-key map (kbd "C-x r U") 'undo-tree-restore-state-from-register)
+    (define-key map (kbd "C-/") nil)
+    map))
+
+(global-undo-tree-mode)
+
+(global-unset-key (kbd "C-z"))
+(global-set-key (kbd "C-z") 'undo-tree-undo)
+
+(global-unset-key (kbd "C-y"))
+(global-set-key (kbd "C-y") 'undo-tree-redo)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
