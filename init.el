@@ -227,6 +227,7 @@
 
 ;; (global-set-key [f13] 'execute-extended-command)
 (global-set-key [f13] 'smex)
+(global-set-key (kbd "C-S-P") 'smex)
 ;; TODO: maybe have f13 (caps lock) cancel smex if smex is already up
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

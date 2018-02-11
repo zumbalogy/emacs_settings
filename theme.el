@@ -8,7 +8,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(global-linum-mode 1)
+(add-hook 'text-mode-hook 'linum-mode)
+(add-hook 'prog-mode-hook 'linum-mode)
 
 (setq linum-format "%3d ")
 
@@ -48,3 +49,7 @@
 
 ;; Corrects (and improves) org-mode's native fontification.
 ;; (doom-themes-org-config)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(set-default-font "DejaVu Sans Mono")

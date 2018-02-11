@@ -157,5 +157,7 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
         (when col?
           (move-to-column (string-to-number col-name)))))))
 
+(global-unset-key [(control p)])
 (global-unset-key [(control t)])
 (global-set-key [(control t)] 'my-find-file)
+(global-set-key [(control p)] 'my-find-file)
