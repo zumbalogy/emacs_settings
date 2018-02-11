@@ -83,7 +83,7 @@
 (add-hook 'treemacs-mode-hook
           (lambda ()
             (linum-mode -1)
-            (load-theme-buffer-local 'my-treemacs (get-buffer " *Treemacs-Framebuffer-1*"))
+            (load-theme-buffer-local 'my-treemacs (treemacs--get-framelocal-buffer))
             (define-key treemacs-mode-map [mouse-1] 'my-treemacs-click-action)
             (treemacs-git-mode 'simple)
             ))

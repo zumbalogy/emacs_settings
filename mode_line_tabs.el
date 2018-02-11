@@ -10,8 +10,9 @@
 
 (setq tabbar-buffer-groups-function 'my-tabbar-buffer-groups)
 
+(setq *tabbar-ignore-regex* '("Treemacs-Framebuffer"))
+
 (setq *tabbar-ignore-buffers* '("*Treemacs*"
-                                " *Treemacs-Framebuffer-1*"
                                 "*Messages*"
                                 "*Shell Command Output*"
                                 "*scratch*"
@@ -43,9 +44,11 @@
         (remove-if
          (lambda (buffer)
            (and (not (eq (current-buffer) buffer)) ; Always include the current buffer.
-                (loop for name in *tabbar-ignore-buffers* ;remove buffer name in this list.
-                      thereis (string-equal (buffer-name buffer) name))))
+                (or (loop for regex in *tabbar-ignore-regex*
+                          thereis (string-match-p regex (buffer-name buffer)))
+                    (loop for name in *tabbar-ignore-buffers*
+                          thereis (string-equal name (buffer-name buffer))))))
          (buffer-list))))
 
-(global-set-key (kbd "C-S-<iso-lefttab>") 'tabbar-backward-tab)
-(global-set-key (kbd "C-<tab>") 'tabbar-forward-tab)
+;; (global-set-key (kbd "C-S-<iso-lefttab>") 'tabbar-backward-tab)
+;; (global-set-key (kbd "C-<tab>") 'tabbar-forward-tab)

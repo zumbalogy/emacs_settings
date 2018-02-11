@@ -208,6 +208,10 @@
   (interactive "p")
   (simpleclip-copy (region-beginning) (region-end)))
 
+(defun cua-cut-region (&optional _)
+  (interactive "p")
+  (simpleclip-cut (region-beginning) (region-end)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; (defun my-smart-tab (&optional n)

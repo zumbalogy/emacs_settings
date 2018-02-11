@@ -87,7 +87,7 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun root-dir ()
-  (let ((backend (vc-responsible-backend default-directory)))
+  (let ((backend (ignore-errors (vc-responsible-backend default-directory))))
     (if backend
         (ignore-errors
           (expand-file-name
@@ -107,7 +107,10 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
   (mapcar (function buffer-name) (buffer-list)))
 
 (defun list-all ()
-  (append recentf-list (list-buffers) (list-files)))
+  (append recentf-list
+          (list-buffers)
+          (when (ignore-errors (vc-responsible-backend default-directory))
+            (list-files))))
 
 (defun clean-fname (name)
   (let* ((a (string-remove-prefix (root-dir) name))
@@ -136,7 +139,6 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
     (ido-completing-read "" choices nil nil nil
                          'extended-command-history
                          (car choices))))
-
 (defun my-find-file ()
   (interactive)
   (let* ((fname (my-completing-read (list-all-clean))))
