@@ -33,6 +33,8 @@
 (set-face-background 'mode-line "#1c1e24")
 (set-face-background 'mode-line-inactive "#1c1e24")
 
+(set-face-attribute 'region nil :background "#42444a")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Global settings (defaults)
