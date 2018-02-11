@@ -19,7 +19,6 @@
     ;; mode-line-remote
     ;; mode-line-frame-identification
     ;; mode-line-buffer-identification
-    ;; "    "
     ;; " "
     ;; mode-line-position
     ;; "%c:%l"
@@ -29,8 +28,6 @@
     ;; mode-line-misc-info
     ;; mode-line-end-spaces
     ))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq *tabbar-ignore-regex* '("Treemacs-Framebuffer"))
 
@@ -50,6 +47,8 @@
                                 "*slime-events*"
                                 ))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun mode-buffers ()
   (remove-if
    (lambda (buffer)
@@ -62,8 +61,9 @@
 
 (defun mode-line-split (left right)
   (let* ((available-width (- (window-width) (length left) -3))) ; linenums push this 3
-    ;; (format (format "%%s %%%ds" available-width) left right)))
     (format (format "%%s%%%ds" available-width) left right)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun propertize-name (name)
   (let* ((n (concat " " name " "))
@@ -71,11 +71,9 @@
     (if selected
         ;; (propertize n 'face '(:foreground "#4466bb" :box '(:line-width 5 :color "gray80")))
         (propertize n 'face '(:foreground "#4466bb" ))
-      ;; (propertize n 'face '(:foreground "#666666" :box '(:line-width 5 :color "gray80"))))))
       (propertize n 'face '(:foreground "#666666" )))))
-;; TODO: boxes make the tabs twitch a pixel when adding and removing them
-;; need something like border-box. same thing with it being a pixel too tall too, to line up with
-;; treemacs buffer, though could give treemacs modeline a 1 pixel invisble border to match
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun sorted-tabs ()
   (sort (mode-buffers)
@@ -89,11 +87,7 @@
          (output (mapconcat 'identity color-names " ")))
     output))
 
-(setq-default mode-line-format
-              '((:eval
-                (mode-line-split
-                 (format-mode-line 'mode-line-details)
-                 (mode-line-tabs)))))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun my-tab-forward (&optional arg)
   (interactive)
@@ -111,6 +105,14 @@
                      (first (last tabs))
                    (nth (- pos 1) tabs))))
     (switch-to-buffer buffer)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq-default mode-line-format
+              '((:eval
+                (mode-line-split
+                 (format-mode-line 'mode-line-details)
+                 (mode-line-tabs)))))
 
 (global-set-key (kbd "C-S-<iso-lefttab>") 'my-tab-backward)
 (global-set-key (kbd "C-<tab>") 'my-tab-forward)
