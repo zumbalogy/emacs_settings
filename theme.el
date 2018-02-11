@@ -4,7 +4,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(load-theme 'atom-one-dark t)
+;; (load-theme 'atom-one-dark t)
 
 (require 'doom-themes)
 
@@ -40,34 +40,16 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; (require 'color-theme-buffer-local)
-;; (add-hook 'foo-mode-hook (lambda nil (color-theme-buffer-local 'color-theme-robin-hood (current-buffer)) ))
+ (add-hook 'minibuffer-setup-hook
+           (lambda ()
+             (make-local-variable 'face-remapping-alist)
+             (add-to-list 'face-remapping-alist
+                          '(default (:foreground "#bbc2cf"))
+                          ;; '(default (:background "red"))
+                          )))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(set-face-background 'mode-line-inactive "#1c1e24") ; to match active one
-;; TODO: right now anything darker or lighter kinda looks like the inactive
-;; buffer is the active buffer. so, i should make some way of representing that and all
-;; maybe have current line (or linum) highlighted or something
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
-(dolist (buf '(" *Echo Area 0*" " *Echo Area 1*"))
-  (with-current-buffer (get-buffer buf)
-    (make-local-variable 'face-remapping-alist)
-    (add-to-list 'face-remapping-alist '(default (:foreground "#bbc2cf")))))
-
-(add-hook 'minibuffer-setup-hook
-          (lambda ()
-            (make-local-variable 'face-remapping-alist)
-            (add-to-list 'face-remapping-alist
-                         '(default (:foreground "#bbc2cf")))))
-
-;; TODO: if set background, it works far all this except when buffers are changed
-;; and there is just blank space there, and running the echo area code
-;; does not fill it in. but this might not be a problem if i move
-;; tabs (or a default time message) down there.
-;; forground works to set because its only when its blank is it a problem
+(set-face-foreground 'mode-line "#bbc2cf")
+(set-face-background 'mode-line "#1c1e24")
+(set-face-background 'mode-line-inactive "#1c1e24")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

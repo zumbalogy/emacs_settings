@@ -29,12 +29,15 @@
     ;; mode-line-end-spaces
     ))
 
-(setq *tabbar-ignore-regex* '("Treemacs-Framebuffer"))
+(setq *tabbar-ignore-regex* '("Treemacs-Framebuffer"
+                              "Desktop Treemacs Helper"))
 
 (setq *tabbar-ignore-buffers* '("*Treemacs*"
                                 "*Messages*"
                                 "*Shell Command Output*"
                                 "*scratch*"
+                                "*server*"
+                                " *server*"
                                 "*Completions*"
                                 " *code-conversion-work*"
                                 " *Echo Area 0*"
@@ -60,6 +63,8 @@
    (buffer-list)))
 
 (defun mode-line-split (left right)
+  ;; this should maybe see how many lines the current buffer is
+  ;; and how long the linums will be
   (let* ((available-width (- (window-width) (length left) -3))) ; linenums push this 3
     (format (format "%%s%%%ds" available-width) left right)))
 
