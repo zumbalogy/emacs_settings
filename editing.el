@@ -491,3 +491,15 @@
     (candidates (get-clj-completions arg))))
 
 (add-to-list 'company-backends 'company-infclj)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(require 'clojure-mode-extra-font-locking)
+
+;; Maybe i should make control-w close error buffers and such (any with a * maybe),
+;; and their frame if its not the only frame. or, have C-S-W kill buffer and frame
+(setq cider-show-error-buffer t)
+(setq cider-auto-select-error-buffer t)
