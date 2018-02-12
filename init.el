@@ -1,6 +1,5 @@
 (setq load-path (cons "~/emacs" load-path))
 
-
 ;; ln -s emacs/.emacs .emacs
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -62,15 +61,66 @@
 
 (defun my-desktop-save ()
   (interactive)
-  ;; Don't call desktop-save-in-desktop-dir, as it prints a message.
-  ;; (if (eq (desktop-owner) (emacs-pid)) ;; wont work with emacsclient
-  ;;     (desktop-save desktop-dirname)))
   (desktop-save desktop-dirname))
 
 (desktop-save-mode 1)
 (setq desktop-restore-eager 12)
-;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 (add-hook 'auto-save-hook 'my-desktop-save)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(require 'saveplace)
+(save-place-mode 1)
+
+(defmacro with-suppressed-message (&rest body)
+  (let ((message-log-max nil))
+    `(with-temp-message (or (current-message) "") ,@body)))
+
+(defvar last-buffer-save-fname "~/.emacs.d/my_last_buffer.save")
+
+(defun my-file-contents (fname)
+  (with-temp-buffer
+    (insert-file-contents fname)
+    (buffer-string)))
+
+
+(setq *buffer-save-ignore-regex* '("Treemacs-Framebuffer"
+                                   "Desktop Treemacs Helper"))
+
+(setq *buffer-save-ignore-buffers* '("*Treemacs*"
+                                     "*Messages*"
+                                     "*Shell Command Output*"
+                                     " *server*"
+                                     "*Completions*"
+                                     " *Echo Area 0*"
+                                     " *Echo Area 1*"
+                                     " *Minibuf-0*"
+                                     " *Minibuf-1*"
+                                     ))
+
+(defun my-save-buffer-hook ()
+  (with-suppressed-message
+   (let ((buffer (current-buffer)))
+     (when (not (or (loop for regex in *buffer-save-ignore-regex*
+                          thereis (string-match-p regex (buffer-name buffer)))
+                    (loop for name in *buffer-save-ignore-buffers*
+                          thereis (string-equal name (buffer-name buffer)))))
+       (write-region (buffer-file-name buffer)
+                     nil
+                     last-buffer-save-fname)))))
+
+;; TODO: could look for buffer, then be smarter
+(defun my-load-buffer ()
+  (let* ((name (my-file-contents last-buffer-save-fname)))
+    (find-file name)))
+
+(add-hook 'server-done-hook 'save-all)
+(add-hook 'server-done-hook 'my-save-buffer-hook)
+(add-hook 'server-done-hook 'desktop-save-in-desktop-dir)
+
+(add-hook 'window-configuration-change-hook 'my-save-buffer-hook)
+
+(setq initial-buffer-choice 'my-load-buffer)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -85,7 +135,7 @@
 (setq
    backup-by-copying t      ; don't clobber symlinks
    backup-directory-alist
-    '(("." . "~/.saves"))
+   '(("." . "~/.saves"))
    delete-old-versions t
    kept-new-versions 6
    kept-old-versions 2
@@ -265,6 +315,7 @@
 ;;  (setq inferior-lisp-program "sbcl")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

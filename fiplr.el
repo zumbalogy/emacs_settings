@@ -139,9 +139,10 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
     (ido-completing-read "" choices nil nil nil
                          'extended-command-history
                          (car choices))))
-(defun my-find-file ()
+(defun my-find-file (&optional input-fname)
   (interactive)
-  (let* ((fname (my-completing-read (list-all-clean))))
+  (let* ((fname (or input-fname
+                    (my-completing-read (list-all-clean)))))
     (when fname
       (let* ((split-name (split-string fname ":"))
              (file-name (pop split-name))
@@ -157,7 +158,9 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
         (when col?
           (move-to-column (string-to-number col-name)))))))
 
-(global-unset-key [(control p)])
+(global-unset-key [(control o)])
 (global-unset-key [(control t)])
+(global-unset-key [(control p)])
+(global-set-key [(control o)] 'my-find-file)
 (global-set-key [(control t)] 'my-find-file)
 (global-set-key [(control p)] 'my-find-file)

@@ -195,6 +195,8 @@
   (define-key cua-global-keymap [C-return] nil)
   (global-set-key [(C-return)] 'nonbreaking-return))
 
+(global-set-key [C-S-return] 'open-line)
+
 (delete-selection-mode 1)
 
 (setq save-interprogram-paste-before-kill t)
