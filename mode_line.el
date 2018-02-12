@@ -30,7 +30,9 @@
     ))
 
 (setq *tabbar-ignore-regex* '("Treemacs-Framebuffer"
-                              "Desktop Treemacs Helper"))
+                              "Desktop Treemacs Helper"
+                              "nrepl-server"
+                              "cider-temp clojure-mode"))
 
 (setq *tabbar-ignore-buffers* '("*Treemacs*"
                                 "*Messages*"

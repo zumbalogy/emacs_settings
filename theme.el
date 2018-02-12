@@ -8,8 +8,13 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(global-linum-mode)
+
 (add-hook 'text-mode-hook 'linum-mode)
 (add-hook 'prog-mode-hook 'linum-mode)
+(add-hook 'fundamental-mode-hook 'linum-mode)
+
+(add-hook 'cider-repl-mode-hook #'linum-mode)
 
 (setq linum-format "%3d ")
 

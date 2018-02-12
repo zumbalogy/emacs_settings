@@ -45,13 +45,7 @@ TODO
 
 ;; maybe have file pathname be longer, as to lessen need for treemacs
 
-;; TODO: get emacsclient and emacs --daemon working with loaded the config files in a smart way
-;; and restoring the session. cuts start up time in less than half, which is nice.
-
-these are the current packages i have downloaded:
-
-(icicles atom-one-dark-theme cider clojure-mode-extra-font-locking clojure-mode color-theme-buffer-local color-theme doom-themes all-the-icons el-get font-lock+ memoize minibuffer-line multiple-cursors neotree queue rainbow-delimiters seq smex smooth-scroll smooth-scrolling spinner symon tabbar treemacs-projectile treemacs hydra pfuture ace-window avy f s dash projectile pkg-info epl undo-tree use-package diminish bind-key)
-
+;; https://www.emacswiki.org/emacs/HippieExpand
 
 TODO: https://www.gnu.org/software/emacs/manual/html_node/elisp/Advising-Functions.html
  would maybe be better than redefining some functions that i redefine

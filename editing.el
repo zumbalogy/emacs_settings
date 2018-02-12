@@ -399,6 +399,22 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun select-line (&optional arg)
+  (interactive "p")
+  (beginning-of-line)
+  (let ((oldval (or (cdr-safe transient-mark-mode) transient-mark-mode))
+        (beg (point-marker)))
+    (when mark-active
+      (forward-line 1))
+    (end-of-line)
+    (unless mark-active
+      (push-mark beg nil t))
+    (setq transient-mark-mode (cons 'only oldval))))
+
+(global-set-key (kbd "C-S-L") 'select-line)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 
 (define-key paredit-mode-map (kbd "C-9") nil)
 (define-key paredit-mode-map (kbd "C-0") nil)
@@ -418,3 +434,60 @@
 ;; (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; https://github.com/clojure-emacs/cider/blob/master/doc/code_completion.md
+
+(require 'cljdoc)
+(require 'cider)
+
+(setq nrepl-hide-special-buffers t
+      cider-eldoc-display-context-dependent-info t)
+
+(add-hook 'clojure-mode-hook 'cider-mode)
+(add-hook 'cider-interaction-mode-hook 'cider-turn-on-eldoc-mode)
+
+(add-hook 'cider-mode-hook #'eldoc-mode)
+
+(add-hook 'cider-repl-mode-hook 'company-mode)
+(add-hook 'cider-mode-hook 'company-mode)
+
+(add-hook 'cider-repl-mode-hook 'cider-company-enable-fuzzy-completion)
+(add-hook 'cider-mode-hook 'cider-company-enable-fuzzy-completion)
+
+(setq company-idle-delay 0) ; default 0.5
+;; (setq company-idle-delay nil) ; never start completions automatically
+
+;; (setq ac-cider-show-ns nil)
+;; (global-set-key (kbd "C-TAB") #'company-complete)
+
+;; (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+
+(define-key clojure-mode-map (kbd "C->") 'clojure-thread-first-all)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; https://martintrojer.github.io/clojure/2014/10/02/clojure-and-emacs-without-cider
+
+(require 'company-etags)
+(add-to-list 'company-etags-modes 'clojure-mode)
+
+(defun get-clj-completions (prefix)
+  (let* ((proc (inferior-lisp-proc))
+         (comint-filt (process-filter proc))
+         (kept ""))
+    (set-process-filter proc (lambda (proc string) (setq kept (concat kept string))))
+    (process-send-string proc (format "(complete.core/completions \"%s\")\n"
+                                      (substring-no-properties prefix)))
+    (while (accept-process-output proc 0.1))
+    (setq completions (read kept))
+    (set-process-filter proc comint-filt)
+    completions))
+
+(defun company-infclj (command &optional arg &rest ignored)
+  (interactive (list 'interactive))
+
+  (cl-case command
+    (interactive (company-begin-backend 'company-infclj))
+    (prefix (and (eq major-mode 'inferior-lisp-mode)
+                 (company-grab-symbol)))
+    (candidates (get-clj-completions arg))))
+
+(add-to-list 'company-backends 'company-infclj)
