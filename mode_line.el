@@ -98,6 +98,7 @@
 
 (defun my-tab-forward (&optional arg)
   (interactive)
+  (save-some-buffers t)
   (let* ((tabs (sorted-tabs))
          (pos (cl-position (current-buffer) tabs))
          (buffer (or (nth (+ pos 1) tabs)
@@ -106,6 +107,7 @@
 
 (defun my-tab-backward (&optional arg)
   (interactive)
+  (save-some-buffers t)
   (let* ((tabs (sorted-tabs))
          (pos (cl-position (current-buffer) tabs))
          (buffer (if (eq 0 pos)

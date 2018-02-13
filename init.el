@@ -193,6 +193,8 @@
 
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 
+(setq auto-save-visited-file-name t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq tooltip-use-echo-area t)

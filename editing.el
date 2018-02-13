@@ -492,10 +492,7 @@
 
 (add-to-list 'company-backends 'company-infclj)
 
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 
 (require 'clojure-mode-extra-font-locking)
 
@@ -503,3 +500,12 @@
 ;; and their frame if its not the only frame. or, have C-S-W kill buffer and frame
 (setq cider-show-error-buffer t)
 (setq cider-auto-select-error-buffer t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq cider-repl-result-prefix ";; => ")
+(setq cider-interactive-eval-result-prefix ";; -> ")
+
+(setq cider-repl-wrap-history t)
+(setq cider-repl-history-size 10000)
+(setq cider-repl-history-file (expand-file-name "~/.emacs.d/cider-repl.history"))
