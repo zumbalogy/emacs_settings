@@ -8,7 +8,7 @@
             (treemacs-follow-mode t)
             (treemacs-filewatch-mode t)
             (setq treemacs-follow-after-init          t
-                  treemacs-file-event-delay	      300 ;ms
+                  treemacs-file-event-delay           300 ;ms
                   treemacs-width                      28
                   treemacs-indentation                2
                   treemacs-git-integration            t
@@ -84,6 +84,9 @@
             (load-theme-buffer-local 'my-treemacs (treemacs--get-framelocal-buffer))
             (define-key treemacs-mode-map [mouse-1] 'my-treemacs-click-action)
             (treemacs-git-mode 'simple)))
+
+(add-hook 'focus-in-hook #'treemacs-refresh)
+(add-hook 'focus-out-hook #'treemacs-refresh)
 
 (add-to-list 'after-make-frame-functions
              (lambda (_)
