@@ -1,5 +1,13 @@
 TODO
 
+
+
+
+;; maybe have holding caps-lock be like holding control, and tapping it
+;; (or just tapping control) bring up smex/mx stuff
+
+;; bug in control-arrow, unable to move past // in ruby land
+
 ;; save emacs desktops on a per project bases maybe
 
 ;; have the modeline know if the buffer is linum mode or not and ajust accordingly.

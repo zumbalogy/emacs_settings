@@ -128,7 +128,8 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 
 (defun ido-bindings ()
   (define-key ido-completion-map (kbd "TAB") 'minibuffer-complete)
-  (define-key ido-completion-map (kbd "C-a") 'move-beginning-of-line))
+  (define-key ido-completion-map (kbd "C-a") 'move-beginning-of-line)
+  (define-key ido-completion-map (kbd "C-e") 'move-end-of-line))
 
 (defun my-completing-read (choices)
   (let ((ido-setup-hook (cons 'ido-bindings ido-setup-hook))
@@ -139,6 +140,7 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
     (ido-completing-read "" choices nil nil nil
                          'extended-command-history
                          (car choices))))
+
 (defun my-find-file (&optional input-fname)
   (interactive)
   (let* ((fname (or input-fname

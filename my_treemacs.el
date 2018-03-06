@@ -73,9 +73,7 @@
 ;; TODO: get this to move focus to new buffer
 
 ;; also, look into dired-sidebar, as its faster
-;; and treemacs is now super slow.
-;; just have to figure out nice sorting
-;; for that one.
+;; just have to figure out nice sorting for it.
 
 (require 'color-theme-buffer-local)
 (add-to-list 'custom-theme-load-path "~/emacs/themes")
@@ -85,5 +83,8 @@
             (linum-mode -1)
             (load-theme-buffer-local 'my-treemacs (treemacs--get-framelocal-buffer))
             (define-key treemacs-mode-map [mouse-1] 'my-treemacs-click-action)
-            (treemacs-git-mode 'simple)
-            ))
+            (treemacs-git-mode 'simple)))
+
+(add-to-list 'after-make-frame-functions
+             (lambda (_)
+               (run-at-time "0 sec" nil #'treemacs-projectile)))

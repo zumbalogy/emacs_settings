@@ -30,12 +30,14 @@
 (menu-bar-mode -1)
 (set-face-attribute 'default nil :height 130)
 
-(setq column-number-mode t)
+(setq-default column-number-mode t)
 
 (setq-default cursor-type 'bar)
 
+(setq-default require-final-newline 'visit-save)
+
 (setq-default indent-tabs-mode nil)
-(setq tab-width 2)
+(setq-default tab-width 2)
 
 ;; (show-paren-mode 1) 'package)
 
@@ -126,9 +128,9 @@
 
 ;; store all backup and autosave files in the tmp dir
 (setq backup-directory-alist
-      `((".*" . ,temporary-file-directory)))
+      `(("." . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
+      `(("." ,temporary-file-directory t)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -142,6 +144,8 @@
    version-control t
    undo-tree-auto-save-history t
    undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo")))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defvar undo-tree-map
   (let ((map (make-sparse-keymap)))
@@ -207,11 +211,11 @@
               (string-equal " *" (substring (buffer-name) 0 2)))
     (save-buffer))
   (unless (string-equal "*Treemacs*" (buffer-name))
-    (kill-this-buffer)))
+    (kill-buffer)))
 
-;; https://emacs.stackexchange.com/questions/3330/how-to-reopen-just-killed-buffer-like-c-s-t-in-firefox-browser
-(defvar killed-file-list nil
-  "List of recently killed files.")
+;; emacs.stackexchange.com/questions/3330/how-to-reopen-just-killed-buffer-like-c-s-t-in-firefox-browser
+;; List of recently killed files.
+(defvar killed-file-list nil)
 
 ;; TODO: have the kill-file-list capped at 24 files or so
 (defun add-file-to-killed-file-list ()
@@ -277,10 +281,12 @@
 (if (eq window-system 'x)
     (shell-command "xmodmap -e 'clear Lock' -e 'keycode 66 = F13'"))
 
-;; (global-set-key [f13] 'execute-extended-command)
 (global-set-key [f13] 'smex)
 (global-set-key (kbd "C-S-P") 'smex)
-;; TODO: maybe have f13 (caps lock) cancel smex if smex is already up
+;; TODO: maybe have f13 (caps lock) cancel smex if smex is already up,
+;; or maybe toggle between fiplr and smex
+
+;; https://gitlab.com/at-home-modifier/at-home-modifier-evdev/wikis/home
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
