@@ -121,7 +121,9 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
 (defun list-all-clean ()
   (let* ((empty-filter (lambda (x) (not (string= x ""))))
          (short-names (mapcar 'clean-fname (list-all)))
+         ;; (long-names (list-all))
          (non-empty-names (seq-filter empty-filter short-names)))
+         ;; (non-empty-names (seq-filter empty-filter long-names)))
     (delete-dups non-empty-names)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -141,6 +143,11 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
                          'extended-command-history
                          (car choices))))
 
+(defun my-match-file (fname)
+  (seq-find (lambda (x) (string-match-p (regexp-quote fname)
+                                        x))
+            (list-all)))
+
 (defun my-find-file (&optional input-fname)
   (interactive)
   (let* ((fname (or input-fname
@@ -152,9 +159,12 @@ The first parameter TYPE is the symbol 'DIRECTORIES or 'FILES."
              (col-name (pop split-name))
              (file? (not (string-match-p "^:" fname)))
              (line? (and line-name (not (string= "" line-name))))
-             (col? (and col-name (not (string= "" col-name)))))
+             (col? (and col-name (not (string= "" col-name))))
+             (matched-file (when file? (my-match-file file-name))))
         (when file?
-          (find-file file-name))
+          (if (get-buffer file-name)
+              (switch-to-buffer file-name)
+            (find-file (or matched-file file-name))))
         (when line?
           (goto-line (string-to-number line-name)))
         (when col?

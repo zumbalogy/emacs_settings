@@ -142,19 +142,59 @@
          (progn ,@body)
        (move-to-column column))))
 
+(defun copy-line (&optional arg)
+  "Copy lines (as many as prefix argument) in the kill ring.
+      Ease of use features:
+      - Move to start of next line.
+      - Appends the copy on sequential calls.
+      - Use newline as last char even on the last line of the buffer.
+      - If region is active, copy its lines."
+  (interactive "p")
+  (let ((beg (line-beginning-position))
+        (end (line-end-position arg)))
+    (when mark-active
+      (if (> (point) (mark))
+          (setq beg (save-excursion (goto-char (mark)) (line-beginning-position)))
+        (setq end (save-excursion (goto-char (mark)) (line-end-position)))))
+    (if (eq last-command 'copy-line)
+        (kill-append (buffer-substring beg end) (< end beg))
+      (kill-ring-save beg end)))
+  (kill-append "\n" nil)
+  (beginning-of-line (or (and arg (1+ arg)) 2))
+  (if (and arg (not (= 1 arg))) (message "%d lines copied" arg)))
+
 (defun move-text-internal (arg)
   (cond
    ((and mark-active transient-mark-mode)
-    (if (> (point) (mark))
-        (exchange-point-and-mark))
-    (let ((column (current-column))
-          (text (delete-and-extract-region (point) (mark))))
-      (forward-line arg)
-      (move-to-column column t)
-      (set-mark (point))
-      (insert text)
-      (exchange-point-and-mark)
-      (setq deactivate-mark nil)))
+    (let* ((deactivate-mark nil)
+           (pos-col (current-column))
+           (top-col (save-excursion (goto-char (region-beginning)) (current-column)))
+           (bot-col (save-excursion (goto-char (region-end)) (current-column)))
+           (pos-line (line-number-at-pos))
+           (top-line (line-number-at-pos (region-beginning)))
+           (bot-line (line-number-at-pos (region-end)))
+           (adjust (if (< 0 arg) 1 -1)))
+      (copy-line)
+      (goto-line top-line)
+      (dotimes (_ (+ 1 (- bot-line top-line)))
+        (kill-whole-line))
+      (forward-line adjust)
+      (yank)
+      (if (= pos-line bot-line)
+          (progn
+            (goto-line (+ adjust top-line))
+            (move-to-column top-col t)
+            (push-mark (point))
+            (activate-mark)
+            (goto-line (+ adjust bot-line))
+            (move-to-column bot-col t))
+        (progn
+          (goto-line (+ adjust bot-line))
+          (move-to-column bot-col t)
+          (push-mark (point))
+          (activate-mark)
+          (goto-line (+ adjust top-line))
+          (move-to-column top-col t)))))
    (t
     (beginning-of-line)
     (when (or (> arg 0) (not (bobp)))
@@ -176,7 +216,7 @@
 (global-set-key (kbd "C-S-<up>") 'move-text-up)
 (global-set-key (kbd "C-S-<down>") 'move-text-down)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (cua-mode t)
 (setq cua-auto-tabify-rectangles nil) ;; Don't tabify after rectangle commands
