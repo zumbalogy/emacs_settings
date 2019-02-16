@@ -125,3 +125,6 @@
 
 (global-set-key (kbd "C-S-<iso-lefttab>") 'my-tab-backward)
 (global-set-key (kbd "C-<tab>") 'my-tab-forward)
+
+(global-set-key (kbd "<C-prior>") 'my-tab-backward)
+(global-set-key (kbd "<C-next>") 'my-tab-forward)
