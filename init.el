@@ -21,7 +21,7 @@
     ("f93b82e0ad0ea189fd981581fa66891aa78bd581a8a17931b4c644da3b18d7a6" "3273aa1448e0bfe6bf3d500f95e49f645743616a3116e88dfbdf982159f48c44" "64333355ad27d35db1ae47a9843a6b75f24e6192d74c97ae479286f9e445270e" "d56c707f683d5904415886a08f09c6b4724a3601477a7dbec1a15bc722935727" "" default)))
  '(package-selected-packages
    (quote
-    (company ac-cider simpleclip dired-sidebar all-the-icons-dired treemacs-projectile treemacs cider auto-package-update cljdoc paredit parinfer haskell-emacs haml-mode color-theme-modern load-theme-buffer-local coffee-mode delight desktop+ fiplr undo-tree use-package symon smooth-scrolling smooth-scroll smex rainbow-delimiters multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking atom-one-dark-theme))))
+    (web-mode company ac-cider simpleclip dired-sidebar all-the-icons-dired treemacs-projectile treemacs cider auto-package-update cljdoc paredit parinfer haskell-emacs haml-mode color-theme-modern load-theme-buffer-local coffee-mode delight desktop+ fiplr undo-tree use-package symon smooth-scrolling smooth-scroll smex rainbow-delimiters multiple-cursors minibuffer-line el-get doom-themes color-theme-buffer-local clojure-mode-extra-font-locking atom-one-dark-theme))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -332,3 +332,19 @@
  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun my-web-mode-hook ()
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2))
+
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(global-auto-revert-mode t)

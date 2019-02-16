@@ -85,9 +85,17 @@
             (define-key treemacs-mode-map [mouse-1] 'my-treemacs-click-action)
             (treemacs-git-mode 'simple)))
 
-(add-hook 'focus-in-hook #'treemacs-refresh)
-(add-hook 'focus-out-hook #'treemacs-refresh)
+(defun my-treemacs-refresh ()
+  (let ((inhibit-message t))
+    (if (treemacs--is-visible?)
+        (treemacs-refresh)
+      (treemacs-projectile))
+    (when (string= (buffer-name (treemacs-buffer-exists?)) (buffer-name))
+      (other-window 1))))
+
+(add-hook 'focus-in-hook #'my-treemacs-refresh)
+(add-hook 'focus-out-hook #'my-treemacs-refresh)
 
 (add-to-list 'after-make-frame-functions
              (lambda (_)
-               (run-at-time "0 sec" nil #'treemacs-projectile)))
+               (run-at-time "0 sec" nil #'my-treemacs-refresh)))

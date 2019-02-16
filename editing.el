@@ -299,6 +299,7 @@
 (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
 (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
 (add-hook 'clojure-mode-hook          #'enable-paredit-mode)
+(add-hook 'scheme-mode-hook          #'enable-paredit-mode)
 
 (defun paredit-delete-indentation (&optional arg)
   "Handle joining lines that end in a comment."
